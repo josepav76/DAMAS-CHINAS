@@ -1,0 +1,5259 @@
+/*
+ ============================================================================
+ Name        : damas_gtk.c/
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in GTK+
+ ============================================================================
+ */
+
+#include <gtk/gtk.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+//se declaran las ventanas
+GObject *ven_confirmar_salir;
+GObject *modo_juego;
+GObject *ventanaAcerca;
+GObject *ventanaAyuda;
+GObject *ventana_2nombres;
+GObject *ventana_6nombres;
+GObject *ventana_color_2;
+GObject *ventana_color_6;
+GObject *ventana_tablero;
+GObject *ventana_cant_jug;
+GObject *ventana_quien_gano;
+GObject *ventana_confirmar_salir,*boton_aceptar_salir, *boton_cancelar_salir,*acerc;
+//se declaran los botones de cada ventana
+GObject *ayuda,*acerca,*nuevo,*salir;
+GObject *boton_aceptar_salir;
+GObject *boton_cancelar_salir;
+GObject *boton_hum_vs_hum;
+GObject *boton_humpc;
+GObject *boton_pc_vs_pc;
+GObject *boton_sgte_ventana;
+GObject *boton_ayuda_cerrar;
+GObject *label_jug1;
+GObject *label_jug2;
+GObject *boton_volver_color_2;
+GObject *boton_jugar_tablero;
+GObject *label_jug1_;
+GObject *label_jug2_;
+GObject *label_jug3;
+GObject *label_jug4;
+GObject *label_jug5;
+GObject *label_jug6;
+GObject *boton_volver_color_6,*boton_juego_tablero_6;
+
+
+GObject *color_button2_verde;
+GObject *color_button2_rojo;
+GObject *color_button2_random;
+GObject *color_button6_verde;//quien empieza
+GObject *color_button6_rojo;//quien empieza
+GObject *color_button6_random;//quien empieza
+GObject *color_button6_amarillo;
+GObject *color_button6_lila;
+GObject *color_button6_naranja;
+GObject *color_button6_azul;
+
+
+GObject *elige_button2_verde;
+GObject *elige_button2_rojo;
+GObject *elige_button2_random;
+GObject *elige_button6_verde;
+GObject *elige_button6_rojo;
+GObject *elige_button6_amarillo;
+GObject *elige_button6_lila;
+GObject *elige_button6_naranja;
+GObject *elige_button6_azul;
+GObject *elige_button6_random;
+
+GObject *boton_volver_cant;
+GObject *boton_volver_cant2;
+GObject *boton_siguiente_nombres2;
+GObject *boton_ventana_cant2;
+GObject *boton_siguiente_nombres6;
+
+
+GObject *boton_turno1;
+GObject *boton_turno2;
+GObject *boton_turno3;
+GObject *boton_turno4;
+GObject *boton_turno5;
+GObject *boton_turno6;
+GObject *boton_turno_actual;
+GObject *label_turno_actual;
+GObject *boton_next;
+GObject *boton_2jug;
+GObject *boton_6jug;
+GObject *boton_volver_modo_juego;
+GObject *boton_volver_ventana_color;
+GObject*boton1,*boton2,*boton3,*boton4,*boton5,*boton6,*boton7,*boton8,*boton9,*boton10,*boton11,*boton12,*boton13,*boton14,*boton15,*boton16,*boton17,*boton18,*boton19,*boton20,
+*boton21,*boton22,*boton23,*boton24,*boton25,*boton26,*boton27,*boton28,*boton29,*boton30,*boton31,*boton32,*boton33,*boton34,*boton35,*boton36,*boton37,*boton38,*boton39,*boton40,
+*boton41,*boton42,*boton43,*boton44,*boton45,*boton46,*boton47,*boton48,*boton49,*boton50,*boton51,*boton52,*boton53,*boton54,*boton55,*boton56,*boton57,*boton58,*boton59,*boton60,
+*boton61,*boton62,*boton63,*boton64,*boton65,*boton66,*boton67,*boton68,*boton69,*boton70,*boton71,*boton72,*boton73,*boton74,*boton75,*boton76,*boton77,*boton78,*boton79,*boton80,
+*boton81,*boton82,*boton83,*boton84,*boton85,*boton86,*boton87,*boton88,*boton89,*boton90,*boton91,*boton92,*boton93,*boton94,*boton95,*boton96,*boton97,*boton98,*boton99,*boton100,
+*boton101,*boton102,*boton103,*boton104,*boton105,*boton106,*boton107,*boton108,*boton109,*boton110,*boton111,*boton112,*boton113,*boton114,*boton115,*boton116,*boton117,*boton118,
+*boton119,*boton120,
+*boton121;//se declara los 121 botones del tablero
+GObject *boton_juega_pc;
+//colores de orden
+GObject *color1,*color2,*color3,*color4,*color5,*color6,*colorActual,*colorGanador;
+
+//entrys
+GObject *label_color2;
+GObject *label_elige2;
+GObject *label_color6;
+GObject *label_elige6;
+GObject *nombreActual;
+GObject *ficha_ganador,*aviso_archivo;
+//imagen
+GtkWidget *imagen;
+GdkPixbuf *imagen_ficha_verde,*imagen_ficha_amarillo,*imagen_ficha_naranja,*imagen_ficha_rojo,*imagen_ficha_lila,*imagen_ficha_azul;
+GObject *jug1,*jug2;
+GObject *jug1_,*jug2_,*jug3,*jug4,*jug5,*jug6,*entry_nombre_archivo;
+//
+const gchar *nombre_archivo;
+FILE *ARCHIVO,*COLOR;
+char nom1,nom2,nom3,nom4,nom5,nom6,nom1_,_,nom2__;
+//builder
+GtkBuilder *builder;
+int op_modoH=0,op_modoHvsPc=0,op_modoPcvsPc=0;//para saber si es hvsh o hvspc
+int cant_jug2=0,cant_jug6=0;//para saber que cantidad de jugadores
+int op_color=0,op_quien_empieza=0;
+int vector_turno[6]={0};
+int u=0,termino=0,quien_juega,fil,col,q=0;
+int vector_quien_juega[6]={0},accion=1;
+char turno;
+int valor,a,b,salto=0;
+int se_movio=0,cont_salto=0;
+char vec_juego[20]={};
+char color[6][10];
+char nombres[6][20];
+//funciones del c
+
+void borrarP();
+void cargar_fichas();
+void quien_empieza();
+void generar_turno();
+void juega_humano(int fil, int col);
+void juega_pc();
+void coordenadas(int valor);
+void print_tablero();
+int verficar_ganador();
+int posibilidades(int fil,int col);
+void crea_archivo_config();
+void cargar_config();
+//funciones del gtk
+void funcion_reiniciar();
+void funcion_ventana_ayuda();
+void funcion_ventana_acerca();
+void funcion_ventana_acerc();
+void funcion_boton_juega_pc();
+void confirmacion_salida();
+void cancelar_salir();
+void funcion_ir_tablero_juego6();
+void funcion_ventana_ganador();
+void funcion_ir_tablero_juego();
+void funcion_siguiente2();
+void check_hpc();
+void funcion_ir_ventana_colores();
+void funcion_volver2();
+void check_cant2();
+void check_hh();
+void check_cant6();
+void check_pc_vs_pc();
+void funcion_siguiente6();
+void funcion_volver_elegir_colores2();
+void funcion_volver_elegir_colores6();
+void funcion_volver_modo_juego();
+void funcion_volver_modo_juego();
+void funcion_volver6();
+void funcion_sgte_ventana();
+int inteligencia();
+int inteligencia_seleccion();
+/*Matrices de inteligencia*/
+char inteligenciaRojoVerde[17][25]={
+		"            +            ",
+		"           + +           ",
+		"          + + +          ",
+		"         + + + +         ",
+		"- - - - + + + + + - - - -",
+		" - - - + + + + + + - - - ",
+		"  - - - + + + + + - - -  ",
+		"   - - + + + + + + - -   ",
+		"    - - + + + + + - -    ",
+		"   - - + + + + + + - -   ",
+		"  - - - + + + + + - - -  ",
+		" - - - + + + + + + - - - ",
+		"- - - - + + + + + - - - -",
+		"         + + + +         ",
+		"          + + +          ",
+		"           + +           ",
+		"            +            "};
+
+char inteligenciaAmarilloLila[17][25]={
+		"            -            ",
+		"           - -           ",
+		"          - - -          ",
+		"         - - - -         ",
+		"- - - - - - - - + + + + +",
+		" - - - - - - + + + + + + ",
+		"  - - - - + + + + + + +  ",
+		"   - - + + + + + + + +   ",
+		"    + + + + + + + + +    ",
+		"   + + + + + + + + - -   ",
+		"  + + + + + + + - - - -  ",
+		" + + + + + + - - - - - - ",
+		"+ + + + + - - - - - - - -",
+		"         - - - -         ",
+		"          - - -          ",
+		"           - -           ",
+		"            -            "};
+
+char inteligenciaNaranjaAzul[17][25]={
+		"            -            ",
+		"           - -           ",
+		"          - - -          ",
+		"         - - - -         ",
+		"+ + + + + - - - - - - - -",
+		" + + + + + + - - - - - - ",
+		"  + + + + + + + - - - -  ",
+		"   + + + + + + + + - -   ",
+		"    + + + + + + + + +    ",
+		"   - - + + + + + + + +   ",
+		"  - - - - + + + + + + +  ",
+		" - - - - - - + + + + + + ",
+		"- - - - - - - - + + + + +",
+		"         - - - -         ",
+		"          - - -          ",
+		"           - -           ",
+		"            -            "};
+
+
+char tablero[17][25]={
+		"            v            ",
+		"           v v           ",
+		"          v v v          ",
+		"         v v v v         ",
+		"a a a a * * * * * y y y y",
+		" a a a * * * * * * y y y ",
+		"  a a * * * * * * * y y  ",
+		"   a * * * * * * * * y   ",
+		"    * * * * * * * * *    ",
+		"   l * * * * * * * * n   ",
+		"  l l * * * * * * * n n  ",
+		" l l l * * * * * * n n n ",
+		"l l l l * * * * * n n n n",
+		"         r r r r         ",
+		"          r r r          ",
+		"           r r           ",
+		"            r            "};
+char tablero_ganador[17][25]={
+		"            r            ",
+		"           r r           ",
+		"          r r r          ",
+		"         r r r r         ",
+		"n n n n * * * * * l l l l",
+		" n n n * * * * * * l l l ",
+		"  n n * * * * * * * l l  ",
+		"   n * * * * * * * * l   ",
+		"    * * * * * * * * *    ",
+		"   y * * * * * * * * a   ",
+		"  y y * * * * * * * a a  ",
+		" y y y * * * * * * a a a ",
+		"y y y y * * * * * a a a a",
+		"         v v v v         ",
+		"          v v v          ",
+		"           v v           ",
+		"            v            "};
+
+void funcion_reiniciar()//la funcion reinicia todos los valores para volver a cargar los datos para el juego
+{
+	int i;
+	for(i=0;i<=5;i++)// inicializar el vector de turno
+	{
+		vector_turno[i]=0;
+		vector_quien_juega[i]=0;
+	}
+	u=0,termino=0,fil,col,q=0;
+	accion=1;
+	salto=0;
+
+	gtk_widget_hide((GtkWidget *) ventana_tablero);
+	gtk_widget_show_all((GtkWidget *) modo_juego);
+}
+int inteligencia_seleccion()
+{
+	int i,j, aux=0;
+	//para verde
+
+	if(turno=='v')
+	{
+			for(i=0;i<=17;i++)
+			{
+				for(j=0;j<=25;j++)
+				{
+					if(tablero[i][j]!=' ')
+					{
+						aux++;
+						if(tablero[i][j]=='v')
+						{
+
+										if(tablero[i+1][j+1]=='*' && inteligenciaRojoVerde[i+1][j+1]=='+')
+										{
+												return aux;
+										}
+										if(tablero[i+1][j-1]=='*' && inteligenciaRojoVerde[i+1][j-1]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j-2]=='*' && inteligenciaRojoVerde[i][j-2]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j+2]=='*' && inteligenciaRojoVerde[i][j+2]=='+')
+										{
+											return aux;
+										}
+										//
+										if(tablero[i+1][j+1]=='*' && inteligenciaRojoVerde[i+2][j+2]=='+')
+										{
+												return aux;
+										}
+										if(tablero[i+1][j-1]=='*' && inteligenciaRojoVerde[i+2][j-2]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j-2]=='*' && inteligenciaRojoVerde[i][j-4]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j+2]=='*' && inteligenciaRojoVerde[i][j+4]=='+')
+										{
+											return aux;
+										}
+
+							}
+					}
+				}
+			}
+	}
+
+//para rojo
+	if(turno=='r')
+	{
+		aux=122;
+		for(i=16;i>=0;i--)
+			{
+				for(j=24;j>=0;j--)
+				{
+					if(tablero[i][j]!=' ')
+					{
+						aux--;
+						if(tablero[i][j]=='r')
+						{
+										if(tablero[i-1][j+1]=='*' && inteligenciaRojoVerde[i-1][j+1]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i-1][j-1]=='*' && inteligenciaRojoVerde[i-1][j-1]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j-2]=='*' && inteligenciaRojoVerde[i][j-2]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j+2]=='*' && inteligenciaRojoVerde[i][j+2]=='+')
+										{
+											return aux;
+										}
+										//
+										if(tablero[i-1][j+1]=='*' && inteligenciaRojoVerde[i-1][j+2]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i-1][j-1]=='*' && inteligenciaRojoVerde[i-1][j-2]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j-2]=='*' && inteligenciaRojoVerde[i][j-4]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j+2]=='*' && inteligenciaRojoVerde[i][j+4]=='+')
+										{
+											return aux;
+										}
+
+						}
+					}
+				}
+			}
+	}
+//para lila
+	if(turno=='l')
+	{
+			for(i=0;i<17;i++)
+			{
+				for(j=0;j<25;j++)
+				{
+					if(tablero[i][j]!=' ')
+					{
+									aux++;
+
+							if(tablero[i][j]=='l')
+							{
+											if(tablero[i+1][j+1]!='*' && tablero[i+1][j+1]!=' ' && tablero[i+1][j+1]!='p')//derecha arriba
+											{
+												if(tablero[i+2][j+2]=='*' && inteligenciaAmarilloLila[i+2][j+2]=='+')
+												{
+													return aux;
+												}
+
+
+											}
+											if(tablero[i-1][j+1]!='*' && tablero[i-1][j+1]!=' ' && tablero[i-1][j+1]!='p')//izquierda arriba
+											{
+												if(tablero[i-2][j+2]=='*' && inteligenciaAmarilloLila[i-2][j+2]=='+')
+												{
+													return aux;
+												}
+											}
+
+
+
+											if(tablero[i][j+2]!='*' && tablero[i][j+2]!=' ' && tablero[i][j+2]!='p')//derecha paralelo
+											{
+												if(tablero[i][j+4]=='*' && inteligenciaAmarilloLila[i][j+4]=='+')
+												{
+													return aux;
+												}
+
+											}
+											if(tablero[i+1][j+1]=='*' && inteligenciaAmarilloLila[i+1][j+1]=='+')
+											{
+													return aux;
+											}
+											if(tablero[i-1][j+1]=='*' && inteligenciaAmarilloLila[i-1][j+1]=='+')
+											{
+												return aux;
+											}
+											if(tablero[i+1][j]=='*' && inteligenciaAmarilloLila[i+1][j]=='+')
+											{
+												return aux;
+											}
+											if(tablero[i][j+2]=='*' && inteligenciaAmarilloLila[i][j+2]=='+')
+											{
+												return aux;
+											}
+
+							}
+					}
+				}
+			}
+	}
+//para amarillo
+	if(turno=='y')
+	{
+			for(i=0;i<17;i++)
+			{
+				for(j=0;j<25;j++)
+				{
+					if(tablero[i][j]!=' ')
+					{
+						aux++;
+						if(tablero[i][j]=='y')
+						{
+							if(tablero[i+1][j+1]!='*' && tablero[i+1][j+1]!=' ' && tablero[i+1][j+1]!='p')//derecha arriba
+							{
+								if(tablero[i+2][j+2]=='*' && inteligenciaAmarilloLila[i+2][j+2]=='+')
+								{
+									return aux;
+								}
+
+
+							}
+							if( tablero[i+1][j-1]!='*' && tablero[i+1][j-1]!=' ' && tablero[i+1][j-1]!='p')//derecha abajo
+							{
+								if(tablero[i+2][j-2]=='*' && inteligenciaAmarilloLila[i+2][j-2]=='+')
+								{
+									return aux;
+								}
+							}
+
+							if( tablero[i-1][j-1]!='*' && tablero[i-1][j-1]!=' ' && tablero[i-1][j-1]!='p')//izquierda abajo
+							{
+								if(tablero[i-2][j-2]=='*' && inteligenciaAmarilloLila[i-2][j-2]=='+')
+								{
+									return aux;
+								}
+							}
+
+							if(tablero[i][j-2]!='*' && tablero[i][j-2]!=' ' && tablero[i][j-2]!='p')//izquierda paralelo
+							{
+								if(tablero[i][j-4]=='*' && inteligenciaAmarilloLila[i][j-4]=='+')
+								{
+									return aux;
+								}
+							}
+										if(tablero[i+1][j-1]=='*' && inteligenciaAmarilloLila[i+1][j-1]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i-1][j-1]=='*' && inteligenciaAmarilloLila[i-1][j-1]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i+1][j]=='*' && inteligenciaAmarilloLila[i+1][j]=='+')
+										{
+											return aux;
+										}
+										if(tablero[i][j-2]=='*' && inteligenciaAmarilloLila[i][j-2]=='+')
+										{
+											return aux;
+										}
+
+								}
+					}
+				}
+			}
+	}
+//para azul
+	if(turno=='a')
+	{
+			for(i=0;i<17;i++)
+			{
+				for(j=0;j<25;j++)
+				{
+					if(tablero[i][j]!=' ')
+					{
+						aux++;
+						if(tablero[i][j]=='a')
+						{
+							if(tablero[i+1][j+1]!='*' && tablero[i+1][j+1]!=' ' && tablero[i+1][j+1]!='p')//derecha arriba
+							{
+								if(tablero[i+2][j+2]=='*'&& inteligenciaNaranjaAzul[i+2][j+2]=='+')
+								{
+									return aux;
+								}
+
+
+							}
+							if(tablero[i-1][j+1]!='*' && tablero[i-1][j+1]!=' ' && tablero[i-1][j+1]!='p')//izquierda arriba
+							{
+								if(tablero[i-2][j+2]=='*'&& inteligenciaNaranjaAzul[i-2][j+2]=='+')
+								{
+									return aux;
+								}
+							}
+							if(tablero[i][j+2]!='*' && tablero[i][j+2]!=' ' && tablero[i][j+2]!='p')//derecha paralelo
+							{
+								if(tablero[i][j+4]=='*'&& inteligenciaNaranjaAzul[i][j+4]=='+')
+								{
+									return aux;
+								}
+
+							}
+							if(tablero[i+1][j+1]=='*' && inteligenciaNaranjaAzul[i+1][j+1]=='+')
+							{
+									return aux;
+							}
+							if(tablero[i-1][j+1]=='*' && inteligenciaNaranjaAzul[i-1][j+1]=='+')
+							{
+								return aux;
+							}
+							if(tablero[i+1][j]=='*' && inteligenciaNaranjaAzul[i+1][j]=='+')
+							{
+								return aux;
+							}
+							if(tablero[i][j+2]=='*' && inteligenciaNaranjaAzul[i][j+2]=='+')
+							{
+								return aux;
+							}
+
+								}
+					}
+				}
+			}
+	}
+//para naranja
+	if(turno=='n')
+	{
+			for(i=0;i<17;i++)
+			{
+				for(j=0;j<25;j++)
+				{
+					if(tablero[i][j]!=' ')
+					{
+						aux++;
+						if(tablero[i][j]=='n')
+						{
+							if( tablero[i+1][j-1]!='*' && tablero[i+1][j-1]!=' ' && tablero[i+1][j-1]!='p')//derecha abajo
+							{
+								if(tablero[i+2][j-2]=='*'&& inteligenciaNaranjaAzul[i+2][j-2]=='+')
+								{
+									return aux;
+								}
+							}
+							if( tablero[i-1][j-1]!='*' && tablero[i-1][j-1]!=' ' && tablero[i-1][j-1]!='p')//izquierda abajo
+							{
+								if(tablero[i-2][j-2]=='*'&& inteligenciaNaranjaAzul[i-2][j-2]=='+')
+								{
+									return aux;
+								}
+							}
+
+							if(tablero[i][j-2]!='*' && tablero[i][j-2]!=' ' && tablero[i][j-2]!='p')//izquierda paralelo
+							{
+								if(tablero[i][j-4]=='*'&& inteligenciaNaranjaAzul[i][j-4]=='+')
+								{
+									return aux;
+								}
+							}
+							if(tablero[i+1][j-1]=='*' && inteligenciaNaranjaAzul[i+1][j-1]=='+')
+							{
+								return aux;
+							}
+							if(tablero[i-1][j-1]=='*' && inteligenciaNaranjaAzul[i-1][j-1]=='+')
+							{
+								return aux;
+							}
+							if(tablero[i+1][j]=='*' && inteligenciaNaranjaAzul[i+1][j]=='+')
+							{
+								return aux;
+							}
+							if(tablero[i][j-2]=='*' && inteligenciaNaranjaAzul[i][j-2]=='+')
+							{
+								return aux;
+							}
+
+						}
+
+					}
+				}
+			}
+	}
+	return 0;
+}
+int inteligencia()
+{
+	int h,k;
+	if(turno=='v')
+	{
+		for(h=17;h>=1;h--)
+		{
+			for(k=25;k>=1;k--)
+			{
+				if(tablero[h][k]=='p' && inteligenciaRojoVerde[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='p';
+					return 1;
+				}
+				if(tablero[h][k]=='P' && inteligenciaRojoVerde[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='P';
+					return 1;
+				}
+
+			}
+		}
+	}
+	if(turno=='r')
+	{
+		for(h=1;h<=17;h++)
+		{
+			for(k=1;k<=25;k++)
+			{
+				if(tablero[h][k]=='p' && inteligenciaRojoVerde[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='p';
+					return 1;
+				}
+				if(tablero[h][k]=='P' && inteligenciaRojoVerde[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='P';
+					return 1;
+				}
+
+			}
+		}
+	}
+	if(turno=='a')
+	{
+		for(h=17;h>=1;h--)
+		{
+			for(k=25;k>=1;k--)
+			{
+				if(tablero[h][k]=='p' && inteligenciaNaranjaAzul[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='p';
+					return 1;
+				}
+				if(tablero[h][k]=='P' && inteligenciaNaranjaAzul[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='P';
+					return 1;
+				}
+
+			}
+		}
+	}
+	if(turno=='n')
+	{
+		for(h=1;h<=17;h++)
+		{
+			for(k=1;k<=25;k++)
+			{
+				if(tablero[h][k]=='p' && inteligenciaNaranjaAzul[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='p';
+					return 1;
+				}
+				if(tablero[h][k]=='P' && inteligenciaNaranjaAzul[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='P';
+					return 1;
+				}
+
+			}
+		}
+	}
+	if(turno=='l')
+	{
+		for(h=1;h<=17;h++)
+		{
+			for(k=25;k>=1;k--)
+			{
+				if(tablero[h][k]=='p' && inteligenciaAmarilloLila[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='p';
+					return 1;
+				}
+				if(tablero[h][k]=='P' && inteligenciaAmarilloLila[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='P';
+					return 1;
+				}
+
+			}
+		}
+	}
+	if(turno=='y')
+	{
+		for(h=17;h>=1;h--)
+		{
+			for(k=1;k<=25;k++)
+			{
+				if(tablero[h][k]=='p' && inteligenciaAmarilloLila[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='p';
+					return 1;
+				}
+				if(tablero[h][k]=='P' && inteligenciaAmarilloLila[h][k]=='+' )
+				{
+					borrarP();
+					tablero[h][k]='P';
+					return 1;
+				}
+
+			}
+		}
+	}
+	return 0;
+}
+void confirmacion_salida(GtkWidget *widget, gpointer data)
+{
+	/*mensaje de confirmación de salida del programa*/
+	gtk_widget_show_all((GtkWidget *)ventana_confirmar_salir);
+	g_signal_connect(boton_aceptar_salir,"clicked",G_CALLBACK(gtk_main_quit),NULL);
+	g_signal_connect(boton_cancelar_salir,"clicked",G_CALLBACK(cancelar_salir),NULL);
+}
+void cancelar_salir(GtkWidget *widget, gpointer data)
+{
+	/*cancela el mensaje de confirmar salida del programa*/
+	gtk_widget_hide((GtkWidget *)ventana_confirmar_salir);
+}
+void asignarTablero()//print tablero de gtk
+{
+	int posicionGTK=0;
+	int i,j;
+	for(i=0;i<17;i++)
+	{
+		for(j=0;j<25;j++)
+		{
+			if(tablero[i][j]!=' ')
+				posicionGTK++;
+			if(tablero[i][j]=='*')
+			{
+
+				imagen=gtk_image_new_from_file("vacio.jpeg");
+			}
+			else if(tablero[i][j]=='P'||tablero[i][j]=='p')
+			{
+				imagen=gtk_image_new_from_file("posible.jpg");
+			}
+			else if(tablero[i][j]=='v' || tablero[i][j]=='V')
+			{
+				imagen=gtk_image_new_from_file("verde.jpg");
+			}
+			else if(tablero[i][j]=='y'|| tablero[i][j]=='Y')
+			{
+				imagen=gtk_image_new_from_file("amarillo.jpg");
+			}
+			else if(tablero[i][j]=='n'|| tablero[i][j]=='N')
+			{
+				imagen=gtk_image_new_from_file("naranja.jpg");
+			}
+			else if(tablero[i][j]=='r' || tablero[i][j]=='R' )
+			{
+				imagen=gtk_image_new_from_file("roja.jpg");
+			}
+			else if(tablero[i][j]=='l'|| tablero[i][j]=='L')
+			{
+				imagen=gtk_image_new_from_file("lila.jpg");
+			}
+			else if(tablero[i][j]=='a'|| tablero[i][j]=='A')
+			{
+				imagen=gtk_image_new_from_file("azul.jpg");
+			}
+			else if(tablero[i][j]==' ')
+			{
+				continue;
+			}
+
+			if(posicionGTK==1)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton1),imagen);
+			}
+			if(posicionGTK==2)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton2),imagen);
+			}
+			if(posicionGTK==3)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton3),imagen);
+			}
+			if(posicionGTK==4)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton4),imagen);
+			}
+			if(posicionGTK==5)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton5),imagen);
+			}
+			if(posicionGTK==6)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton6),imagen);
+			}
+			if(posicionGTK==7)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton7),imagen);
+			}
+			if(posicionGTK==8)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton8),imagen);
+			}
+			if(posicionGTK==9)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton9),imagen);
+			}
+			if(posicionGTK==10)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton10),imagen);
+			}
+			if(posicionGTK==11)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton11),imagen);
+			}
+			if(posicionGTK==12)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton12),imagen);
+			}
+			if(posicionGTK==13)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton13),imagen);
+			}
+			if(posicionGTK==14)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton14),imagen);
+			}
+			if(posicionGTK==15)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton15),imagen);
+			}
+			if(posicionGTK==16)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton16),imagen);
+			}
+			if(posicionGTK==17)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton17),imagen);
+			}
+			if(posicionGTK==18)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton18),imagen);
+			}
+			if(posicionGTK==19)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton19),imagen);
+			}
+			if(posicionGTK==20)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton20),imagen);
+			}
+			if(posicionGTK==21)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton21),imagen);
+			}
+			if(posicionGTK==22)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton22),imagen);
+			}
+			if(posicionGTK==23)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton23),imagen);
+			}
+			if(posicionGTK==24)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton24),imagen);
+			}
+			if(posicionGTK==25)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton25),imagen);
+			}
+			if(posicionGTK==26)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton26),imagen);
+			}
+			if(posicionGTK==27)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton27),imagen);
+			}
+			if(posicionGTK==28)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton28),imagen);
+			}
+			if(posicionGTK==29)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton29),imagen);
+			}
+			if(posicionGTK==30)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton30),imagen);
+			}
+			if(posicionGTK==31)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton31),imagen);
+			}
+			if(posicionGTK==32)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton32),imagen);
+			}
+			if(posicionGTK==33)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton33),imagen);
+			}
+			if(posicionGTK==34)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton34),imagen);
+			}
+			if(posicionGTK==35)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton35),imagen);
+			}
+			if(posicionGTK==36)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton36),imagen);
+			}
+			if(posicionGTK==37)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton37),imagen);
+			}
+			if(posicionGTK==38)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton38),imagen);
+			}
+			if(posicionGTK==39)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton39),imagen);
+			}
+			if(posicionGTK==40)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton40),imagen);
+			}
+			if(posicionGTK==41)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton41),imagen);
+			}
+			if(posicionGTK==42)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton42),imagen);
+			}
+			if(posicionGTK==43)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton43),imagen);
+			}
+			if(posicionGTK==44)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton44),imagen);
+			}
+			if(posicionGTK==45)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton45),imagen);
+			}
+			if(posicionGTK==46)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton46),imagen);
+			}
+			if(posicionGTK==47)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton47),imagen);
+			}
+			if(posicionGTK==48)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton48),imagen);
+			}
+			if(posicionGTK==49)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton49),imagen);
+			}
+			if(posicionGTK==50)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton50),imagen);
+			}
+			if(posicionGTK==51)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton51),imagen);
+			}
+			if(posicionGTK==52)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton52),imagen);
+			}
+			if(posicionGTK==53)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton53),imagen);
+			}
+			if(posicionGTK==54)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton54),imagen);
+			}
+			if(posicionGTK==55)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton55),imagen);
+			}
+			if(posicionGTK==56)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton56),imagen);
+			}
+			if(posicionGTK==57)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton57),imagen);
+			}
+			if(posicionGTK==58)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton58),imagen);
+			}
+			if(posicionGTK==59)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton59),imagen);
+			}
+			if(posicionGTK==60)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton60),imagen);
+			}
+			if(posicionGTK==61)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton61),imagen);
+			}
+			if(posicionGTK==62)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton62),imagen);
+			}
+			if(posicionGTK==63)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton63),imagen);
+			}
+			if(posicionGTK==64)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton64),imagen);
+			}
+			if(posicionGTK==65)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton65),imagen);
+			}
+			if(posicionGTK==66)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton66),imagen);
+			}
+			if(posicionGTK==67)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton67),imagen);
+			}
+			if(posicionGTK==68)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton68),imagen);
+			}
+			if(posicionGTK==69)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton69),imagen);
+			}
+			if(posicionGTK==70)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton70),imagen);
+			}
+			if(posicionGTK==71)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton71),imagen);
+			}
+			if(posicionGTK==72)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton72),imagen);
+			}
+			if(posicionGTK==73)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton73),imagen);
+			}
+			if(posicionGTK==74)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton74),imagen);
+			}
+			if(posicionGTK==75)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton75),imagen);
+			}
+			if(posicionGTK==76)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton76),imagen);
+			}
+			if(posicionGTK==77)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton77),imagen);
+			}
+			if(posicionGTK==78)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton78),imagen);
+			}
+			if(posicionGTK==79)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton79),imagen);
+			}
+			if(posicionGTK==80)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton80),imagen);
+			}
+			if(posicionGTK==81)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton81),imagen);
+			}
+			if(posicionGTK==82)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton82),imagen);
+			}
+			if(posicionGTK==83)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton83),imagen);
+			}
+			if(posicionGTK==84)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton84),imagen);
+			}
+			if(posicionGTK==85)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton85),imagen);
+			}
+			if(posicionGTK==86)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton86),imagen);
+			}
+			if(posicionGTK==87)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton87),imagen);
+			}
+			if(posicionGTK==88)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton88),imagen);
+			}
+			if(posicionGTK==89)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton89),imagen);
+			}
+			if(posicionGTK==90)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton90),imagen);
+			}
+			if(posicionGTK==91)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton91),imagen);
+			}
+			if(posicionGTK==92)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton92),imagen);
+			}
+			if(posicionGTK==93)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton93),imagen);
+			}
+			if(posicionGTK==94)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton94),imagen);
+			}
+			if(posicionGTK==95)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton95),imagen);
+			}
+			if(posicionGTK==96)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton96),imagen);
+			}
+			if(posicionGTK==97)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton97),imagen);
+			}
+			if(posicionGTK==98)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton98),imagen);
+			}
+			if(posicionGTK==99)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton99),imagen);
+			}
+			if(posicionGTK==100)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton100),imagen);
+			}
+			if(posicionGTK==101)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton101),imagen);
+			}
+			if(posicionGTK==102)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton102),imagen);
+			}
+			if(posicionGTK==103)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton103),imagen);
+			}
+			if(posicionGTK==104)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton104),imagen);
+			}
+			if(posicionGTK==105)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton105),imagen);
+			}
+			if(posicionGTK==106)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton106),imagen);
+			}
+			if(posicionGTK==107)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton107),imagen);
+			}
+			if(posicionGTK==108)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton108),imagen);
+			}
+			if(posicionGTK==109)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton109),imagen);
+			}
+			if(posicionGTK==110)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton110),imagen);
+			}
+			if(posicionGTK==111)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton111),imagen);
+			}
+			if(posicionGTK==112)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton112),imagen);
+			}
+			if(posicionGTK==113)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton113),imagen);
+			}
+			if(posicionGTK==114)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton114),imagen);
+			}
+			if(posicionGTK==115)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton115),imagen);
+			}
+			if(posicionGTK==116)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton116),imagen);
+			}
+			if(posicionGTK==117)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton117),imagen);
+			}
+			if(posicionGTK==118)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton118),imagen);
+			}
+			if(posicionGTK==119)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton119),imagen);
+			}
+			if(posicionGTK==120)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton120),imagen);
+			}
+			if(posicionGTK==121)
+			{
+				gtk_button_set_image(GTK_BUTTON(boton121),imagen);
+			}
+
+		}
+	}
+
+}
+void generar_turno()//es la funcion que se encarga de generar los turnos
+{
+	int i,x,j;
+	for(i=0;i<=5;i++)// inicializar el vector de turno
+	{
+		vector_turno[i]=0;
+
+	}
+	vector_turno[0]=op_quien_empieza;
+	for (i = 1; i < 6; i++)
+	{
+		while(1)
+		{
+			vector_turno[i] = rand()%6+1;
+			if(vector_turno[0]!=vector_turno[i])
+				break;
+		};
+		if (i>1 && vector_turno[0]!=vector_turno[i])    // a partir del segundo numero que genera empezara a comparar que no se repita
+		{
+			for ( x = 0; x < 6; x++)  //comprobara que no se repita por 6 veces
+			{
+
+				for (j = 0; j < i; j++)
+				{
+					if (vector_turno[i] == vector_turno[j])
+					{
+						while(1)
+						{
+							vector_turno[i] = rand()%6+1;
+							if(vector_turno[0]!=vector_turno[i])
+								break;
+						};
+					}
+				}
+			}
+		}
+
+	}
+	printf("\nGENERADOR DE TURNO\n");
+	for (i = 0; i < 6; i++)
+	{
+		printf("%2d",vector_turno[i]);
+	}
+	printf("\n");
+
+
+	if(cant_jug6==1)
+	{
+		for(i=0;i<6;i++)
+		{
+			if(vector_turno[i]==1)
+			{
+				strcpy(color[0],"VERDE");
+				imagen=gtk_image_new_from_file("verde.jpg");
+			}
+			if(vector_turno[i]==2)
+			{
+				strcpy(color[1],"ROJA");
+				imagen=gtk_image_new_from_file("roja.jpg");
+			}
+			if(vector_turno[i]==3)
+			{
+				strcpy(color[2],"AZUL");
+				imagen=gtk_image_new_from_file("azul.jpg");
+			}
+			if(vector_turno[i]==4)
+			{
+				strcpy(color[3],"AMARILLO");
+				imagen=gtk_image_new_from_file("amarillo.jpg");
+			}
+			if(vector_turno[i]==5)
+			{
+				strcpy(color[4],"LILA");
+				imagen=gtk_image_new_from_file("lila.jpg");
+			}
+			if(vector_turno[i]==6)
+			{
+				strcpy(color[5],"NARANJA");
+				imagen=gtk_image_new_from_file("naranja.jpg");
+			}
+
+			if(i+1==1){
+				gtk_button_set_image(GTK_BUTTON(color1),imagen);
+
+			}
+			if(i+1==2){
+
+				gtk_button_set_image(GTK_BUTTON(color2),imagen);
+			}
+			if(i+1==3){
+
+				gtk_button_set_image(GTK_BUTTON(color3),imagen);
+			}
+			if(i+1==4){
+
+				gtk_button_set_image(GTK_BUTTON(color4),imagen);
+			}
+			if(i+1==5){
+
+				gtk_button_set_image(GTK_BUTTON(color5),imagen);
+			}
+			if(i+1==6){
+
+				gtk_button_set_image(GTK_BUTTON(color6),imagen);
+			}
+
+		}
+	}
+}
+void cargar_fichas()//carga las fichas dependiendo si es para 2 o 6 jugadores
+{
+	int i,j;
+	/*if(op_cant==6)
+	{
+		for(i=0;i<17;i++)
+		{
+			for(j=0;j<25;j++)
+			{
+				printf("%c",tablero[i][j]);
+			}
+			printf("\n");
+		}
+	}*/
+	if(cant_jug2==1)
+	{
+		for(i=0;i<17;i++)
+		{
+			for(j=0;j<25;j++)
+			{
+				if(tablero[i][j]!='v' && tablero[i][j]!='r' && tablero[i][j]!='*'  && tablero[i][j]!=' ')
+				{
+					tablero[i][j]='*';
+				}
+				//printf("%c",tablero[i][j]);
+			}
+			//printf("\n");
+		}
+	}
+}
+void print_tablero()//funcion que imprime el tablero
+{
+	int i,j;
+	for(i=0;i<17;i++)
+	{
+		for(j=0;j<25;j++)
+		{
+			printf("%c",tablero[i][j]);
+		}
+		printf("\n");
+	}printf("\n");
+}
+void quien_empieza()//aun no se modifico lo que recibe la funcion
+{
+	int op_modo=0,op_cant=0;
+	if(cant_jug2==1)
+		op_cant=2;
+
+	if(cant_jug6==1)
+		op_cant=6;
+
+	if(op_modoH==1)
+		op_modo=1;
+
+	if(op_modoHvsPc==1)
+		op_modo=2;
+	if(op_modoPcvsPc==1)
+		op_modo=3;
+	int j=0;
+
+	if (op_quien_empieza == 1)	// VERDE
+	{
+
+		vector_turno[0]=op_quien_empieza;
+		strcpy(color[0],"VERDE");
+		strcpy(color[1],"ROJA");
+		printf("COMIENZA COLOR VERDE!\n");
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega verde!");
+		imagen=gtk_image_new_from_file("verde.jpg");
+		gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+
+		imagen=gtk_image_new_from_file("verde.jpg");
+		gtk_button_set_image(GTK_BUTTON(color1),imagen);
+		imagen=gtk_image_new_from_file("roja.jpg");
+		gtk_button_set_image(GTK_BUTTON(color2),imagen);
+
+		if(op_cant==2)// cantidad 2
+		{
+			vector_turno[1]=2;
+			if(op_modo==1)//humano vs humano
+			{
+				vector_quien_juega[u]=1;
+				vector_quien_juega[u+1]=1;
+				printf("JUEGA VERDE!\n");
+
+			}
+			if(op_modo==2)//humano vs pc
+			{
+				if(op_color==1)
+				{
+
+					vector_quien_juega[u]=1; //bandera empieza humano
+					vector_quien_juega[u+1]=2;
+
+				}
+				if(op_color==2)
+				{
+					vector_quien_juega[u]=2;////bandera empieza pc
+					vector_quien_juega[u+1]=1;
+				}
+			}
+			if(op_modo==3)//pc vs pc
+			{
+				if(op_color==1)
+				{
+					vector_quien_juega[u]=2;
+					vector_quien_juega[u+1]=2;
+
+				}
+				if(op_color==2)
+				{
+					vector_quien_juega[u]=2;
+					vector_quien_juega[u+1]=2;
+				}
+			}
+
+
+		}
+		if(op_cant==6)// cantidad 6
+				{
+					generar_turno();
+					if(op_modo==1)//humano vs humano
+					{
+						vector_quien_juega[u]=1;
+						vector_quien_juega[u+1]=1;
+						vector_quien_juega[u+2]=1;
+						vector_quien_juega[u+3]=1;
+						vector_quien_juega[u+4]=1;
+						vector_quien_juega[u+5]=1;
+						printf("JUEGA VERDE!\n");
+
+					}
+					if(op_modo==2)//humano vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=1;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+					if(op_modo==3)//pc vs 5pc
+					{
+						if(op_color==1)
+						{
+							strcpy(color[0],"VERDE");
+							strcpy(color[1],"ROJA");
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+							strcpy(color[1],"VERDE");
+							strcpy(color[0],"ROJA");
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=2;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+				}
+			}
+			if (op_quien_empieza == 2)	//ROJO
+			{
+
+				vector_turno[0]=op_quien_empieza;
+				printf("COMIENZA EL COLOR ROJO!\n");
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega rojo!");
+				imagen=gtk_image_new_from_file("roja.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+
+				imagen=gtk_image_new_from_file("roja.jpg");
+				gtk_button_set_image(GTK_BUTTON(color1),imagen);
+				imagen=gtk_image_new_from_file("verde.jpg");
+				gtk_button_set_image(GTK_BUTTON(color2),imagen);
+				if(op_cant==2)	// cantidad 2
+				{
+					vector_turno[1]=1;
+					if(op_modo==1)//humano vs humano
+					{
+						vector_quien_juega[u]=1;
+						vector_quien_juega[u+1]=1;
+						printf("JUEGA ROJO!\n");
+
+					}
+					if(op_modo==2)//humano vs pc
+					{
+						if(op_color==1)
+						{
+							vector_quien_juega[u]=2;
+							vector_quien_juega[u+1]=1;
+						}
+						if(op_color==2)
+						{
+							vector_quien_juega[u]=1;
+							vector_quien_juega[u+1]=2;
+						}
+					}
+
+				}
+				if(op_cant==6)// cantidad 6
+				{
+					generar_turno(op_quien_empieza);
+					if(op_modo==1)//humano vs humano
+					{
+						vector_quien_juega[u]=1;
+						vector_quien_juega[u+1]=1;
+						vector_quien_juega[u+2]=1;
+						vector_quien_juega[u+3]=1;
+						vector_quien_juega[u+4]=1;
+						vector_quien_juega[u+5]=1;
+						printf("JUEGA VERDE!\n");
+
+					}
+					if(op_modo==2)//humano vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=1;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+					//
+					if(op_modo==3)//pc vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=2;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+
+				}
+			}
+			if (op_quien_empieza == 3)	//AZUL
+			{
+				vector_turno[0]=op_quien_empieza;
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega azul!");
+				imagen=gtk_image_new_from_file("azul.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+				if(op_cant==6)// cantidad 6
+				{
+					generar_turno(op_quien_empieza);
+					if(op_modo==1)//humano vs humano
+					{
+						vector_quien_juega[u]=1;
+						vector_quien_juega[u+1]=1;
+						vector_quien_juega[u+2]=1;
+						vector_quien_juega[u+3]=1;
+						vector_quien_juega[u+4]=1;
+						vector_quien_juega[u+5]=1;
+						printf("JUEGA VERDE!\n");
+
+					}
+					if(op_modo==2)//humano vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=1;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+					//
+					if(op_modo==3)//humano vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=2;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+
+				}
+
+
+				//*nuevo
+			}
+			if (op_quien_empieza == 4)	//AMARILLO
+			{
+
+				vector_turno[0]=op_quien_empieza;
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega amarillo!");
+				imagen=gtk_image_new_from_file("amarillo.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+				if(op_cant==6)// cantidad 6
+				{
+					generar_turno(op_quien_empieza);
+					if(op_modo==1)//humano vs humano
+					{
+						vector_quien_juega[u]=1;
+						vector_quien_juega[u+1]=1;
+						vector_quien_juega[u+2]=1;
+						vector_quien_juega[u+3]=1;
+						vector_quien_juega[u+4]=1;
+						vector_quien_juega[u+5]=1;
+						printf("JUEGA VERDE!\n");
+
+					}
+					if(op_modo==2)//humano vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=1;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+					//
+					if(op_modo==3)//pc vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=2;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+
+				}
+
+				//*nuevo
+			}
+			if (op_quien_empieza == 5)	//LILA
+			{
+
+				vector_turno[0]=op_quien_empieza;
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega lila!");
+				imagen=gtk_image_new_from_file("lila.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+				if(op_cant==6)// cantidad 6
+				{
+					generar_turno(op_quien_empieza);
+					if(op_modo==1)//humano vs humano
+					{
+						vector_quien_juega[u]=1;
+						vector_quien_juega[u+1]=1;
+						vector_quien_juega[u+2]=1;
+						vector_quien_juega[u+3]=1;
+						vector_quien_juega[u+4]=1;
+						vector_quien_juega[u+5]=1;
+						printf("JUEGA VERDE!\n");
+
+					}
+					if(op_modo==2)//humano vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=1;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+					if(op_modo==3)//pc vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=2;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+
+				}
+				//*nuevo
+			}
+			if (op_quien_empieza == 6)	//NARANJA
+			{
+
+				vector_turno[0]=op_quien_empieza;
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega naranja!");
+				imagen=gtk_image_new_from_file("naranja.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+				if(op_cant==6)// cantidad 6
+				{
+					generar_turno(op_quien_empieza);
+					if(op_modo==1)//humano vs humano
+					{
+						vector_quien_juega[u]=1;
+						vector_quien_juega[u+1]=1;
+						vector_quien_juega[u+2]=1;
+						vector_quien_juega[u+3]=1;
+						vector_quien_juega[u+4]=1;
+						vector_quien_juega[u+5]=1;
+						printf("JUEGA VERDE!\n");
+
+					}
+					if(op_modo==2)//humano vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=1;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=1;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+					if(op_modo==3)//pc vs 5pc
+					{
+						if(op_color==1)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==2)
+						{
+
+								for(j=0;j<6;j++)
+								{
+									if(vector_turno[j]==op_color)
+									{
+										vector_quien_juega[j]=2;
+									}
+									else
+									{
+										vector_quien_juega[j]=2;
+									}
+								}
+
+						}
+						if(op_color==3)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==4)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==5)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+						if(op_color==6)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(vector_turno[j]==op_color)
+								{
+									vector_quien_juega[j]=2;
+								}
+								else
+								{
+									vector_quien_juega[j]=2;
+								}
+							}
+						}
+					}
+
+
+		}
+
+		//*nuevo
+	}
+}
+void funcion_ventana_ayuda(GtkWidget *widget, gpointer data)
+{
+	gtk_dialog_run(GTK_DIALOG(ventanaAyuda));
+	gtk_widget_hide(GTK_WIDGET(ventanaAyuda));
+	//gtk_widget_show_all((GtkWidget *) ventanaAyuda);
+
+}
+void funcion_ventana_acerca(GtkWidget *widget, gpointer data)
+{
+	//gtk_widget_show_all((GtkWidget *) ventanaAcerca);
+	gtk_dialog_run(GTK_DIALOG(ventanaAcerca));
+	gtk_widget_hide(GTK_WIDGET(ventanaAcerca));
+
+}
+void funcion_ventana_acerc(GtkWidget *widget, gpointer data)
+{
+	gtk_dialog_run(GTK_DIALOG(ventanaAcerca));
+	gtk_widget_hide(GTK_WIDGET(ventanaAcerca));
+
+}
+void funcionBoton1(GtkWidget *widget, gpointer data){
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(1);
+	}
+}
+void funcionBoton2(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(2);
+
+	}
+}
+void funcionBoton3(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(3);
+	}
+}
+void funcionBoton4(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(4);
+	}
+}
+void funcionBoton5(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(5);
+	}
+}
+void funcionBoton6(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(6);
+	}
+}
+void funcionBoton7(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(7);
+	}
+}
+void funcionBoton8(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(8);
+	}
+}
+void funcionBoton9(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(9);
+	}
+}
+void funcionBoton10(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(10);
+	}
+}
+void funcionBoton11(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(11);
+	}
+}
+void funcionBoton12(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(12);
+	}
+}
+void funcionBoton13(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(13);
+	}
+}
+void funcionBoton14(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(14);
+	}
+}
+void funcionBoton15(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(15);
+	}
+}
+void funcionBoton16(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(16);
+	}
+}
+void funcionBoton17(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(17);
+	}
+}
+void funcionBoton18(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(18);
+	}
+}
+void funcionBoton19(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(19);
+	}
+}
+void funcionBoton20(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(20);
+	}
+}
+void funcionBoton21(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(21);
+	}
+}
+void funcionBoton22(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(22);
+	}
+}
+void funcionBoton23(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(23);
+	}
+}
+void funcionBoton24(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(24);
+	}
+}
+void funcionBoton25(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(25);
+	}
+}
+void funcionBoton26(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(26);
+	}
+}
+void funcionBoton27(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(27);
+	}
+}
+void funcionBoton28(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(28);
+	}
+}
+void funcionBoton29(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(29);
+	}
+}
+void funcionBoton30(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(30);
+	}
+}
+void funcionBoton31(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(31);
+	}
+}
+void funcionBoton32(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(32);
+	}
+}
+void funcionBoton33(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(33);
+	}
+}
+void funcionBoton34(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(34);
+	}
+}
+void funcionBoton35(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(35);
+	}
+}
+void funcionBoton36(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(36);
+	}
+}
+void funcionBoton37(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(37);
+	}
+}
+void funcionBoton38(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(38);
+	}
+}
+void funcionBoton39(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(39);
+	}
+}
+void funcionBoton40(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(40);
+	}
+}
+void funcionBoton41(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(41);
+	}
+}
+void funcionBoton42(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(42);
+	}
+}
+void funcionBoton43(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(43);
+	}
+}
+void funcionBoton44(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(44);
+	}
+}
+void funcionBoton45(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(45);
+	}
+}
+void funcionBoton46(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(46);
+	}
+}
+void funcionBoton47(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(47);
+	}
+}
+void funcionBoton48(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(48);
+	}
+}
+void funcionBoton49(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(49);
+	}
+}
+void funcionBoton50(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(50);
+	}
+}
+void funcionBoton51(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(51);
+	}
+}
+void funcionBoton52(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(52);
+	}
+}
+void funcionBoton53(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(53);
+	}
+}
+void funcionBoton54(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(54);
+	}
+}
+void funcionBoton55(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(55);
+	}
+}
+void funcionBoton56(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(56);
+	}
+}
+void funcionBoton57(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(57);
+	}
+}
+void funcionBoton58(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(58);
+	}
+}
+void funcionBoton59(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(59);
+	}
+}
+void funcionBoton60(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(60);
+	}
+}
+void funcionBoton61(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(61);
+	}
+}
+void funcionBoton62(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(62);
+	}
+}
+void funcionBoton63(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(63);
+	}
+}
+void funcionBoton64(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(64);
+	}
+}
+void funcionBoton65(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(65);
+	}
+}
+void funcionBoton66(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(66);
+	}
+}
+void funcionBoton67(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(67);
+	}
+}
+void funcionBoton68(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(68);
+	}
+}
+void funcionBoton69(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(69);
+	}
+}
+void funcionBoton70(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(70);
+	}
+}
+void funcionBoton71(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(71);
+	}
+}
+void funcionBoton72(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(72);
+	}
+}
+void funcionBoton73(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(73);
+	}
+}
+void funcionBoton74(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(74);
+	}
+}
+void funcionBoton75(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(75);
+	}
+}
+void funcionBoton76(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(76);
+	}
+}
+void funcionBoton77(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(77);
+	}
+}
+void funcionBoton78(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(78);
+	}
+}
+void funcionBoton79(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(79);
+	}
+}
+void funcionBoton80(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(80);
+	}
+}
+void funcionBoton81(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(81);
+	}
+}
+void funcionBoton82(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(82);
+	}
+}
+void funcionBoton83(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(83);
+	}
+}
+void funcionBoton84(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(84);
+	}
+}
+void funcionBoton85(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(85);
+	}
+}
+void funcionBoton86(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(86);
+	}
+}
+void funcionBoton87(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(87);
+	}
+}
+void funcionBoton88(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(88);
+	}
+}
+void funcionBoton89(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(89);
+	}
+}
+void funcionBoton90(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(90);
+	}
+}
+void funcionBoton91(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(91);
+	}
+}
+void funcionBoton92(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(92);
+	}
+}
+void funcionBoton93(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(93);
+	}
+}
+void funcionBoton94(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(94);
+	}
+}
+void funcionBoton95(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(95);
+	}
+}
+void funcionBoton96(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(96);
+	}
+}
+void funcionBoton97(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(97);
+	}
+}
+void funcionBoton98(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(98);
+	}
+}
+void funcionBoton99(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(99);
+	}
+}
+void funcionBoton100(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(100);
+	}
+}
+void funcionBoton101(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(101);
+	}
+}
+void funcionBoton102(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(102);
+	}
+}
+void funcionBoton103(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(103);
+	}
+}
+void funcionBoton104(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(104);
+	}
+}
+void funcionBoton105(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(105);
+	}
+}
+void funcionBoton106(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(106);
+	}
+}
+void funcionBoton107(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(107);
+	}
+}
+void funcionBoton108(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(108);
+	}
+}
+void funcionBoton109(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(109);
+	}
+}
+void funcionBoton110(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(110);
+	}
+}
+void funcionBoton111(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(111);
+	}
+}
+void funcionBoton112(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(112);
+	}
+}
+void funcionBoton113(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(113);
+	}
+}
+void funcionBoton114(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(114);
+	}
+}
+void funcionBoton115(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(115);
+	}
+}
+void funcionBoton116(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(116);
+	}
+}
+void funcionBoton117(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(117);
+	}
+}
+void funcionBoton118(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(118);
+	}
+}
+void funcionBoton119(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(119);
+	}
+}
+void funcionBoton120(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(120);
+	}
+}
+void funcionBoton121(GtkWidget *widget, gpointer data)
+{
+	if (vector_quien_juega[u]==1)
+	{
+		coordenadas(121);
+	}
+}
+//selecciona el color y guarda en la variable a utilizar luego para identificar los colores de c/u ya sea para 2 o jugadores
+void check_color_button2_verde(GtkWidget *widget, gpointer data)
+{
+		op_color=1;
+
+		gtk_label_set_text(GTK_LABEL(label_color2), "Elegiste Verde!");
+}
+void check_color_button2_rojo(GtkWidget *widget, gpointer data)
+{
+		op_color=2;
+
+		gtk_label_set_text(GTK_LABEL(label_color2), "Elegiste Rojo!");
+}
+void check_color_button2_random(GtkWidget *widget, gpointer data)
+{
+		op_color=rand()%2+1;
+
+		if(op_color==1)
+		{
+			gtk_label_set_text(GTK_LABEL(label_color2), "Elegiste verde!");
+		}else
+			gtk_label_set_text(GTK_LABEL(label_color2), "Elegiste Rojo!");
+}
+void check_elige_button2_verde(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=1;
+
+	gtk_label_set_text(GTK_LABEL(label_elige2), "Comienza verde!");
+
+}
+void check_elige_button2_rojo(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=2;
+
+	gtk_label_set_text(GTK_LABEL(label_elige2), "Comienza Rojo!");
+}
+void check_elige_button2_random(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=rand()%2+1;
+
+	if(op_quien_empieza==1)
+	{
+		gtk_label_set_text(GTK_LABEL(label_elige2), "Comienza verde!");
+	}else
+		gtk_label_set_text(GTK_LABEL(label_elige2), "Comienza Rojo!");
+}
+void check_color_button6_verde(GtkWidget *widget, gpointer data)
+{
+	op_color=1;
+	gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Verde!");
+}
+void check_color_button6_rojo(GtkWidget *widget, gpointer data)
+{
+	op_color=2;
+	gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Rojo!");
+}
+void check_color_button6_azul(GtkWidget *widget, gpointer data)
+{
+	op_color=3;
+	gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Azul!");
+}
+void check_color_button6_amarillo(GtkWidget *widget, gpointer data)
+{
+	op_color=4;
+	gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Amarillo!");
+}
+void check_color_button6_lila(GtkWidget *widget, gpointer data)
+{
+	op_color=5;
+	gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Lila!");
+}
+void check_color_button6_naranja(GtkWidget *widget, gpointer data)
+{
+	op_color=6;
+	gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Naranja !");
+}
+void check_color_button6_random(GtkWidget *widget, gpointer data)
+{
+	op_color=rand()%6+1;
+	if(op_color==1)
+	{
+		gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste verde!");
+	}
+	if(op_color==2)
+	{
+			gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Rojo!");
+	}
+	if(op_color==3)
+	{
+			gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste azul!");
+	}
+	if(op_color==4)
+	{
+			gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Amarillo!");
+	}
+	if(op_color==5)
+	{
+			gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste lila!");
+	}
+	if(op_color==6)
+	{
+			gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste Naranja!");
+	}
+
+}
+void check_elige_button6_verde(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=1;
+	gtk_label_set_text(GTK_LABEL(label_elige6), "Comienza verde!");
+}
+void check_elige_button6_rojo(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=2;
+	gtk_label_set_text(GTK_LABEL(label_elige6), "Comienza Rojo!");
+}
+void check_elige_button6_azul(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=3;
+	gtk_label_set_text(GTK_LABEL(label_elige6), "Comienza Azul!");
+}
+void check_elige_button6_amarillo(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=4;
+	gtk_label_set_text(GTK_LABEL(label_elige6), "Comienza Amarillo!");
+}
+void check_elige_button6_lila(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=5;
+	gtk_label_set_text(GTK_LABEL(label_elige6), "Comienza Lila!");
+}
+void check_elige_button6_naranja(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=6;
+	gtk_label_set_text(GTK_LABEL(label_elige6), "Comienza Naranja!");
+}
+void check_elige_button6_random(GtkWidget *widget, gpointer data)
+{
+	op_quien_empieza=rand()%6+1;
+	if(op_quien_empieza==1)
+	{
+		gtk_label_set_text(GTK_LABEL(label_color6), "Elegiste verde!");
+	}
+	if(op_quien_empieza==2)
+	{
+			gtk_label_set_text(GTK_LABEL(label_elige6), "Elegiste rojo!");
+	}
+	if(op_quien_empieza==3)
+	{
+			gtk_label_set_text(GTK_LABEL(label_elige6), "Elegiste Azul!");
+	}
+	if(op_quien_empieza==4)
+	{
+			gtk_label_set_text(GTK_LABEL(label_elige6), "Elegiste Amarillo!");
+	}
+	if(op_quien_empieza==5)
+	{
+			gtk_label_set_text(GTK_LABEL(label_elige6), "Elegiste Lila!");
+	}
+	if(op_quien_empieza==6)
+	{
+			gtk_label_set_text(GTK_LABEL(label_elige6), "Elegiste Naranja!");
+	}
+
+}
+//termina
+//chequea el modo de juego ya sea hvsh o hvspc
+void check_hh(GtkWidget *widget, gpointer data)
+{
+	if(op_modoH==0)
+	{
+		op_modoH=1;//humvshum activas
+
+	}
+	else if(op_modoH==1)
+	{
+		op_modoH=0;
+	}
+
+}
+void check_hpc(GtkWidget *widget, gpointer data)
+{
+	if(op_modoHvsPc==0)
+		op_modoHvsPc=1;//humvspc
+	else if(op_modoHvsPc==1)
+		op_modoHvsPc=0;
+}
+void check_pc_vs_pc(GtkWidget *widget, gpointer data)
+{
+	if(op_modoPcvsPc==0)
+		op_modoPcvsPc=1;
+	else if(op_modoPcvsPc==1)
+			op_modoPcvsPc=0;
+}
+void funcion_sgte_ventana(GtkWidget *widget, gpointer data){// si esta seleccionada una de las opciones va a sgte ventana que es cantidad de jugadores
+	if((op_modoH==1 && op_modoHvsPc==0 && op_modoPcvsPc==0)||
+	 (op_modoH==0 && op_modoHvsPc==1 && op_modoPcvsPc==0 ) || (op_modoH==0 && op_modoHvsPc==0 && op_modoPcvsPc==1 ) )
+	{
+		if(op_modoPcvsPc==1)
+		{
+			strcpy(vec_juego,nombre_archivo=gtk_entry_get_text(GTK_ENTRY(entry_nombre_archivo)));
+			strcat(vec_juego,".xml");
+			if(vec_juego[0]!='\0'&& vec_juego[1]!='\0'&& vec_juego[2]!='\0')//para verificar que existe un nombre para tu archivo
+			{
+
+				//si somos locales lo que significa no existe archivo
+				if((ARCHIVO=fopen(vec_juego,"r"))==NULL)
+				{
+					gtk_widget_hide((GtkWidget *) modo_juego);
+					gtk_widget_show_all((GtkWidget *) ventana_cant_jug);
+				}else//si somos visitante
+				{
+					//tiene que leer el archivo leer_archivo_config()
+					gtk_widget_hide((GtkWidget *) modo_juego);
+					//si son dos jugadores se abre ventana de nombres de dos jugadores
+
+					//si son seis jugadores se abre la ventana de nombres de 6 jguadores
+
+					//gtk_widget_show_all((GtkWidget *) ventana_cant_jug);
+				}
+
+			}else{//si esta vacio tu vec juego quiere decir que no ingresaste ningun caracter para el nombre de tu archivo
+				aviso_archivo= gtk_builder_get_object(builder, "aviso_archivo");
+				gtk_label_set_text(GTK_LABEL(aviso_archivo),"Ingresar Nombre del archivo");
+			}
+
+		}else{
+			gtk_widget_hide((GtkWidget *) modo_juego);
+			gtk_widget_show_all((GtkWidget *) ventana_cant_jug);
+		}
+
+
+	}
+}
+
+void crea_archivo_config()
+{
+	int i;
+
+	ARCHIVO=fopen(vec_juego,"w+");
+
+	fprintf(ARCHIVO,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	fprintf(ARCHIVO,"<juego>\n\t");
+	fprintf(ARCHIVO,"<config>\n\t\t");
+
+	if(cant_jug2==1)
+	{
+		fprintf(ARCHIVO, "<jugadores numero-jugadores=\"2\">\n");
+		fprintf(ARCHIVO,"\t\t\t<jugador secuencia=\"1\" fichas=\"%s\">%s</jugador>\n", color[0], nombres[0]);
+		fprintf(ARCHIVO,"\t\t\t<jugador secuencia=\"2\" fichas=\"%s\">%s</jugador>\n", color[1], nombres[1]);
+/*		gtk_label_set_text(GTK_LABEL(jug1),nombres[0]);
+		gtk_label_set_text(GTK_LABEL(jug2),nombres[1]);
+		gtk_label_set_text(GTK_LABEL(jug3)," ");
+		gtk_label_set_text(GTK_LABEL(jug4)," ");
+		gtk_label_set_text(GTK_LABEL(jug5)," ");
+		gtk_label_set_text(GTK_LABEL(jug6)," ");*/
+	}
+	if(cant_jug6==1)
+	{
+		fprintf(ARCHIVO, "<jugadores numero-jugadores=\"6\">\n");
+
+		fprintf(ARCHIVO,"\t\t\t<jugador secuencia=\"1\" fichas=\"%s\">%s</jugador>\n",color[vector_turno[0]-1], nombres[0]);
+		fprintf(ARCHIVO,"\t\t\t<jugador secuencia=\"2\" fichas=\"%s\">%s</jugador>\n",color[vector_turno[1]-1], nombres[1]);
+		fprintf(ARCHIVO,"\t\t\t<jugador secuencia=\"3\" fichas=\"%s\">%s</jugador>\n",color[vector_turno[2]-1], nombres[2]);
+		fprintf(ARCHIVO,"\t\t\t<jugador secuencia=\"4\" fichas=\"%s\">%s</jugador>\n",color[vector_turno[3]-1], nombres[3]);
+		fprintf(ARCHIVO,"\t\t\t<jugador secuencia=\"5\" fichas=\"%s\">%s</jugador>\n",color[vector_turno[4]-1], nombres[4]);
+		fprintf(ARCHIVO,"\t\t\t<jugador secuencia=\"6\" fichas=\"%s\">%s</jugador>\n",color[vector_turno[5]-1], nombres[5]);
+			for (i = 0; i < 6; i++)
+			{
+				if(i==0)
+					gtk_label_set_text(GTK_LABEL(jug1_),nombres[0]);
+				if(i==1)
+					gtk_label_set_text(GTK_LABEL(jug2_),nombres[1]);
+				if(i==2)
+				gtk_label_set_text(GTK_LABEL(jug3),nombres[2]);
+				if(i==3)
+				gtk_label_set_text(GTK_LABEL(jug4),nombres[3]);
+				if(i==4)
+				gtk_label_set_text(GTK_LABEL(jug5),nombres[4]);
+				if(i==5)
+				gtk_label_set_text(GTK_LABEL(jug6),nombres[5]);
+			}
+
+	}
+
+	fputs("\t\t</jugadores>\n", ARCHIVO);
+	fputs("\t</config>\n\t", ARCHIVO);
+	fputs("<jugadas>\n\t\t", ARCHIVO);
+	fclose(ARCHIVO);
+
+}
+
+void cargar_config(int a,int origen,int valorPC)
+{
+	ARCHIVO=fopen(vec_juego,"a+");
+	char aux[10];
+	if(turno=='v')
+	{
+		strcpy(aux,"VERDE");
+		strcat(aux,".xml");
+		COLOR=fopen(aux,"a+");
+	}
+	if(turno=='r')
+	{
+		strcpy(aux,"ROJA");
+		strcat(aux,".xml");
+		COLOR=fopen(aux,"a+");
+	}
+	if(turno=='a')
+	{
+		strcpy(aux,"AZUL");
+		strcat(aux,".xml");
+		COLOR=fopen(aux,"a+");
+	}
+	if(turno=='y')
+	{
+		strcpy(aux,"AMARILLO");
+		strcat(aux,".xml");
+		COLOR=fopen(aux,"a+");
+	}
+	if(turno=='n')
+	{
+		strcpy(aux,"NARANJA");
+		strcat(aux,"xml");
+		COLOR=fopen(aux,"a+");
+	}
+	if(turno=='l')
+	{
+		strcpy(aux,"LILA");
+		strcat(aux,".xml");
+		COLOR=fopen(aux,"a+");
+	}
+
+	fprintf(ARCHIVO,"\t\t\t<jugada turno=\"%s\"\n",color[vector_turno[0]-1]);
+	fprintf(COLOR,"\t\t\t<jugada turno=\"%s\"\n",color[vector_turno[0]-1]);
+	if(a==1)
+	{
+		fprintf(ARCHIVO,"\t\t\t\t<movimineto>\"salto\"</movimiento>\n");
+		fprintf(ARCHIVO,"\t\t\t\t<origen>\"%d\"</origen>\n",origen);
+		fprintf(ARCHIVO,"\t\t\t\t<destino>\"%d\"</destino>\n",valorPC);
+		//
+		fprintf(COLOR,"\t\t\t\t<movimineto>\"salto\"</movimiento>\n");
+		fprintf(COLOR,"\t\t\t\t<origen>\"%d\"</origen>\n",origen);
+		fprintf(COLOR,"\t\t\t\t<destino>\"%d\"</destino>\n",valorPC);
+	}
+	if(a==2)
+	{
+		fprintf(ARCHIVO,"\t\t\t\t<movimineto>\"simple\"</movimiento>\n");
+		fprintf(ARCHIVO,"\t\t\t\t<origen>\"%d\"</origen>\n",origen);
+		fprintf(ARCHIVO,"\t\t\t\t<destino>\"%d\"</destino>\n",valorPC);
+		//
+		fprintf(COLOR,"\t\t\t\t<movimineto>\"salto\"</movimiento>\n");
+		fprintf(COLOR,"\t\t\t\t<origen>\"%d\"</origen>\n",origen);
+		fprintf(COLOR,"\t\t\t\t<destino>\"%d\"</destino>\n",valorPC);
+	}
+	fclose(ARCHIVO);
+	fclose(COLOR);
+}
+void check_cant2(GtkWidget *widget, gpointer data)
+{
+	if(cant_jug2==0)
+		cant_jug2=1;//humvshum activas
+	else if(cant_jug2==1)
+		cant_jug2=0;
+}
+void check_cant6(GtkWidget *widget, gpointer data)
+{
+	if(cant_jug6==0)
+		cant_jug6=1;//humvshum activas
+	else if(cant_jug6==1)
+		cant_jug6=0;
+}
+//termina
+void funcion_volver_modo_juego(GtkWidget *widget, gpointer data){//sale de la ventana de cantidad de jugadores para abrir la de modo de juego
+		gtk_widget_hide((GtkWidget *) ventana_cant_jug);
+		gtk_widget_show_all((GtkWidget *) modo_juego);
+}
+void funcion_ir_ventana_colores(GtkWidget *widget, gpointer data){//chequea cuantos jugadroes hay para ir a la sgte ventana de eleccion de colores
+
+
+		if(cant_jug2==1&&cant_jug6==0)
+		{
+
+				gtk_widget_hide((GtkWidget *)ventana_cant_jug );
+				gtk_widget_show_all((GtkWidget *) ventana_color_2);
+
+
+		}
+		if(cant_jug2==0&&cant_jug6==1)
+		{
+
+				gtk_widget_hide((GtkWidget *)ventana_cant_jug );
+				gtk_widget_show_all((GtkWidget *) ventana_color_6);
+
+		}
+
+}
+void funcion_volver6(GtkWidget *widget, gpointer data){//cierra la ventana de eleccion de color para volver a elegir la cantidad de jugadores
+	gtk_widget_hide((GtkWidget *) ventana_color_6);
+	gtk_widget_show_all((GtkWidget *) ventana_cant_jug);
+}
+void funcion_siguiente6(GtkWidget *widget, gpointer data)//pasa de la eleccion de colores a la ventana de nombres
+{
+	gtk_widget_hide((GtkWidget *) ventana_color_6);
+	gtk_widget_show_all((GtkWidget *) ventana_6nombres);
+}
+void funcion_volver2(GtkWidget *widget, gpointer data){//cierra la ventana de elegir los colores para ir a la ventana de cantidad de jugadores
+	gtk_widget_hide((GtkWidget *) ventana_color_2);
+	gtk_widget_show_all((GtkWidget *) ventana_cant_jug);
+}
+void funcion_siguiente2(GtkWidget *widget, gpointer data)//chequea si ya se eligio el color y quien empieza para ir a la ventana de nombres
+{
+	if(op_color!=0&&op_quien_empieza!=0)
+	{
+		gtk_widget_hide((GtkWidget *) ventana_color_2);
+		gtk_widget_show_all((GtkWidget *) ventana_2nombres);
+	}
+
+}
+void funcion_volver_elegir_colores2(GtkWidget *widget, gpointer data)//se cierra la eleccion de nombres para volver a abrir la ventana de eleccion de color
+{
+	gtk_widget_hide((GtkWidget *) ventana_2nombres);
+	gtk_widget_show_all((GtkWidget *) ventana_color_2);
+}
+void funcion_volver_elegir_colores6(GtkWidget *widget, gpointer data)//se cierra la ventana de eleccion de nombres para volver a anrir la ventanana de eleccion de colores
+{
+	gtk_widget_hide((GtkWidget *) ventana_6nombres);
+	gtk_widget_show_all((GtkWidget *) ventana_color_6 );
+}
+void funcion_ir_tablero_juego6(GtkWidget *widget, gpointer data)//en esta funcion se carga los datos previos introducidos para cargar el tablero ya
+{
+	quien_empieza();
+	cargar_fichas();
+	asignarTablero();
+	strcpy(nombres[0],gtk_entry_get_text(GTK_ENTRY(jug1_)));
+	strcpy(nombres[1],gtk_entry_get_text(GTK_ENTRY(jug1_)));
+	strcpy(nombres[2],gtk_entry_get_text(GTK_ENTRY(jug3)));
+	strcpy(nombres[3],gtk_entry_get_text(GTK_ENTRY(jug4)));
+	strcpy(nombres[4],gtk_entry_get_text(GTK_ENTRY(jug5)));
+	strcpy(nombres[5],gtk_entry_get_text(GTK_ENTRY(jug6)));
+	if(op_modoPcvsPc==1)
+	{
+		crea_archivo_config();
+	}
+
+	gtk_widget_hide((GtkWidget *) ventana_6nombres);
+	gtk_widget_show_all((GtkWidget *) ventana_tablero );
+}
+int verficar_ganador()// esta funcion verifica que jugador gano la partida
+{
+	int i,j,cont_r=0, cont_v=0 ,cont_n=0, cont_l=0, cont_y=0, cont_a=0;
+	colorGanador= gtk_builder_get_object(builder, "colorGanador");
+	for(i=0;i<=16;i++)
+	{
+		for(j=0;j<=24;j++)
+		{
+			if(tablero[i][j]==tablero_ganador[i][j])
+			{
+				if(tablero[i][j]=='r')
+				{
+					cont_r++;
+					if(cont_r==10)
+					{
+						printf("FELICIDADES HA GANADO EL ROJO\n");
+						gtk_label_set_text(GTK_LABEL(ficha_ganador),"ROJAS");
+						imagen=gtk_image_new_from_file("roja.jpg");
+						gtk_button_set_image(GTK_BUTTON(colorGanador),imagen);
+
+						return 1;
+					}
+				}
+				if(tablero[i][j]=='v')
+				{
+					cont_v++;
+					if(cont_v==10)
+					{
+						printf("FELICIDADES HA GANADO EL VERDE\n");
+						gtk_label_set_text(GTK_LABEL(ficha_ganador), "VERDE");
+						imagen=gtk_image_new_from_file("verde.jpg");
+						gtk_button_set_image(GTK_BUTTON(colorGanador),imagen);
+						return 1;
+					}
+				}
+				if(tablero[i][j]=='n')
+				{
+					cont_n++;
+					if(cont_n==10)
+					{
+						printf("FELICIDADES HA GANADO EL NARANJA\n");
+
+						gtk_label_set_text(GTK_LABEL(ficha_ganador), "NARANJA");
+						imagen=gtk_image_new_from_file("naranja.jpg");
+						gtk_button_set_image(GTK_BUTTON(colorGanador),imagen);
+						return 1;
+					}
+				}
+				if(tablero[i][j]=='a')
+				{
+					cont_a++;
+					if(cont_a==10)
+					{
+						printf("FELICIDADES HA GANADO EL AZUL\n");
+						gtk_label_set_text(GTK_LABEL(ficha_ganador), "AZUL");
+						imagen=gtk_image_new_from_file("azul.jpg");
+						gtk_button_set_image(GTK_BUTTON(colorGanador),imagen);
+						return 1;
+					}
+				}
+				if(tablero[i][j]=='l')
+				{
+					cont_l++;
+					if(cont_l==10)
+					{
+						printf("FELICIDADES HA GANADO EL LILA\n");
+						gtk_label_set_text(GTK_LABEL(ficha_ganador), "LILA");
+						imagen=gtk_image_new_from_file("lila.jpg");
+						gtk_button_set_image(GTK_BUTTON(colorGanador),imagen);
+						return 1;
+					}
+				}
+				if(tablero[i][j]=='y')
+				{
+					cont_y++;
+					if(cont_y==10)
+					{
+						printf("FELICIDADES HA GANADO EL AMARILLO\n");
+						gtk_label_set_text(GTK_LABEL(ficha_ganador), "amarillo");
+						imagen=gtk_image_new_from_file("amarillo.jpg");
+						gtk_button_set_image(GTK_BUTTON(colorGanador),imagen);
+						return 1;
+					}
+				}
+			}
+		}
+	}
+	return 0;
+}
+void funcion_ir_tablero_juego(GtkWidget *widget, gpointer data)//en esta funcion se carga los datos previos introducidos para cargar el tablero ya
+{
+	quien_empieza();
+	cargar_fichas();
+	asignarTablero();
+	strcpy(nombres[0],gtk_entry_get_text(GTK_ENTRY(jug1)));
+	strcpy(nombres[1],gtk_entry_get_text(GTK_ENTRY(jug2)));
+	if(op_modoPcvsPc==1)
+	{
+		crea_archivo_config();
+	}
+
+
+	gtk_widget_hide((GtkWidget *) ventana_2nombres);
+	gtk_widget_show_all((GtkWidget *) ventana_tablero);
+}
+void funcion_boton_juega_pc()//esta funcion esta vinculada al boton que se encuentra el tablero el cual al dar click la pc puede jugar,actualmente es random
+{
+	if(vector_quien_juega[u]==2)//si el vector_quien_juega es ==2 juega pc
+	{
+		juega_pc();
+	}
+}
+void coordenadas(int valor)//esta funcion lo que hace es encargarse de darle un unico valor a cada pieza en vez de estar pasando por coordenadas
+{
+	int i,j,contador=0;
+	for(i=0;i<17;i++)
+	{
+		for(j=0;j<25;j++)
+		{
+
+			if(tablero[i][j]!=' ')
+			{
+				contador++;
+				if(contador==valor)
+				{
+					fil=i;
+					col=j;
+				}
+			}
+		}
+	}
+	if(vector_quien_juega[u]==1)//en el caso que sea el humano quien juegue habilita a la funcion que juega el humani
+	juega_humano(fil, col);
+}
+int posibilidades(int fil,int col)//esta es la funcion que verifica las posibilidades de elegir y mover la ficha en si, tanto para movimientos simples como los saltos
+{
+	int i=fil,j=col;
+	//moviminetos
+	if(tablero[i+1][j+1]=='*')
+		tablero[i+1][j+1]='p';
+
+	if(tablero[i+1][j-1]=='*')
+		tablero[i+1][j-1]='p';
+
+	if(tablero[i-1][j+1]=='*')
+		tablero[i-1][j+1]='p';
+
+	if(tablero[i-1][j-1]=='*')
+		tablero[i-1][j-1]='p';
+
+	if(tablero[i-1][j]=='*')
+		tablero[i-1][j]='p';
+
+	if(tablero[i+1][j]=='*')
+		tablero[i+1][j]='p';
+	if(tablero[i][j-2]=='*')
+	{
+		tablero[i][j-2]='p';
+	}
+	if(tablero[i][j+2]=='*')
+	{
+		tablero[i][j+2]='p';
+	}
+
+	//1 solo salto
+	if(tablero[i+1][j+1]!='*' && tablero[i+1][j+1]!=' ' && tablero[i+1][j+1]!='p')//derecha arriba
+	{
+		if(tablero[i+2][j+2]=='*')
+		{
+			tablero[i+2][j+2]='P';
+		}
+
+
+	}
+	if( tablero[i+1][j-1]!='*' && tablero[i+1][j-1]!=' ' && tablero[i+1][j-1]!='p')//derecha abajo
+	{
+		if(tablero[i+2][j-2]=='*')
+		{
+			tablero[i+2][j-2]='P';
+		}
+	}
+	if(tablero[i-1][j+1]!='*' && tablero[i-1][j+1]!=' ' && tablero[i-1][j+1]!='p')//izquierda arriba
+	{
+		if(tablero[i-2][j+2]=='*')
+		{
+			tablero[i-2][j+2]='P';
+		}
+	}
+
+	if( tablero[i-1][j-1]!='*' && tablero[i-1][j-1]!=' ' && tablero[i-1][j-1]!='p')//izquierda abajo
+	{
+		if(tablero[i-2][j-2]=='*')
+		{
+			tablero[i-2][j-2]='P';
+		}
+	}
+
+	if(tablero[i][j-2]!='*' && tablero[i][j-2]!=' ' && tablero[i][j-2]!='p')//izquierda paralelo
+	{
+		if(tablero[i][j-4]=='*')
+		{
+			tablero[i][j-4]='P';
+		}
+	}
+
+	if(tablero[i][j+2]!='*' && tablero[i][j+2]!=' ' && tablero[i][j+2]!='p')//derecha paralelo
+	{
+		if(tablero[i][j+4]=='*')
+		{
+			tablero[i][j+4]='P';
+		}
+
+	}
+
+
+
+
+	for(i=0;i<=16;i++)
+		{
+			for(j=0;j<=24;j++)
+			{
+				if(tablero[i][j]=='p' || tablero[i][j]=='P' )
+					return 1;
+			}
+
+		}
+	return 0;
+
+}
+int posibilidades_saltos(int fil,int col, int a, int b)//esta es la funcion que verifica las posibilidades de elegir y mover la ficha en si, tanto para movimientos simples como los saltos n
+{
+	int i=fil,j=col;
+
+
+	//n salto
+	if(tablero[i+1][j+1]!='*' && tablero[i+1][j+1]!=' ' && tablero[i+1][j+1]!='p')//derecha arriba
+	{
+		if(tablero[i+2][j+2]=='*')
+		{
+			tablero[i+2][j+2]='P';
+		}
+
+
+	}
+	if( tablero[i+1][j-1]!='*' && tablero[i+1][j-1]!=' ' && tablero[i+1][j-1]!='p')//derecha abajo
+	{
+		if(tablero[i+2][j-2]=='*')
+		{
+			tablero[i+2][j-2]='P';
+		}
+	}
+	if(tablero[i-1][j+1]!='*' && tablero[i-1][j+1]!=' ' && tablero[i-1][j+1]!='p')//izquierda arriba
+	{
+		if(tablero[i-2][j+2]=='*')
+		{
+			tablero[i-2][j+2]='P';
+		}
+	}
+
+	if( tablero[i-1][j-1]!='*' && tablero[i-1][j-1]!=' ' && tablero[i-1][j-1]!='p')//izquierda abajo
+	{
+		if(tablero[i-2][j-2]=='*')
+		{
+			tablero[i-2][j-2]='P';
+		}
+	}
+
+	if(tablero[i][j-2]!='*' && tablero[i][j-2]!=' ' && tablero[i][j-2]!='p')//izquierda paralelo
+	{
+		if(tablero[i][j-4]=='*')
+		{
+			tablero[i][j-4]='P';
+		}
+	}
+
+	if(tablero[i][j+2]!='*' && tablero[i][j+2]!=' ' && tablero[i][j+2]!='p')//derecha paralelo
+	{
+		if(tablero[i][j+4]=='*')
+		{
+			tablero[i][j+4]='P';
+		}
+
+	}
+
+		for(i=0;i<=16;i++)
+		{
+			for(j=0;j<=24;j++)
+			{
+				if(a==i && b==j)
+				{
+					if(tablero[i][j]=='P')
+					tablero[i][j]='*';
+				}
+			}
+
+		}
+		for(i=0;i<=16;i++)
+		{
+			for(j=0;j<=24;j++)
+			{
+				if(tablero[i][j]=='P' )
+					return 1;
+			}
+
+		}
+	return 0;
+
+}
+void borrarP()//se encarga luego de marcar las posibilidades de borrar todas las 'P' del tablero para seguir con la siguiente jugada
+{
+	int i,j;
+	for(i=0;i<=16;i++)
+		{
+			for(j=0;j<=24;j++)
+			{
+				if(tablero[i][j]=='p' || tablero[i][j]=='P' )
+					tablero[i][j]='*';
+			}
+
+		}
+}
+void juega_pc()//funcion donde se encarga de restringir los valores para la hora de elegir y mover la pieza,y controla el juego de la pc(actualmente es random y sin inteligencia)
+{
+	int valorPC=0;
+
+	printf("INTRODUZCA EL NUMERO DE FICHA A JUGAR\n");
+	if(vector_turno[u]==1)
+	{
+		printf("\njuega verde\n");
+		turno='v';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega verde!");
+
+	}
+	if(vector_turno[u]==2)
+	{
+		printf("\njuega rojo\n");
+		turno='r';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Rojo");
+	}
+	if(vector_turno[u]==3)
+	{
+		printf("\njuega azul\n");
+		turno='a';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Azul!");
+	}
+	if(vector_turno[u]==4)
+	{
+		printf("\njuega amarillo\n");
+		turno='y';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Amarillo!");
+	}
+	if(vector_turno[u]==5)
+	{
+		printf("\njuega lila\n");
+		turno='l';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Lila!");
+	}
+	if(vector_turno[u]==6)
+	{
+		printf("\njuega naranja\n");
+		turno='n';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Naranja!");
+
+	}
+	int origen;
+	do /// SELECCIONAR FICHA
+	{
+		//valorPC=rand()%121+1;
+
+			valorPC=inteligencia_seleccion();
+
+		coordenadas(valorPC);//converdidor de coordenadas
+		//borrarP();
+		if(valorPC>0&&valorPC<122 && tablero[fil][col]==turno && posibilidades(fil,col)==1)
+		{
+			origen=valorPC;
+			inteligencia();//
+			break;
+		}
+
+	}while(1);
+	tablero[fil][col]=turno-32; //convertidor de mayuscula
+	print_tablero();
+	asignarTablero();
+	tablero[fil][col]='*';
+	a=fil,b=col;
+	int cont_mov=0;
+	do /// MOVER FICHA
+	{
+		valorPC=rand()%121+1;
+		coordenadas(valorPC);//converdidor de coordenadas
+
+		if(valorPC>0&&valorPC<122 && (tablero[fil][col]=='p'  || tablero[fil][col]=='P') )
+		{
+			cont_mov++;
+			if(tablero[fil][col]=='P')
+			{
+				borrarP();
+				tablero[fil][col]=turno;
+				print_tablero();
+				asignarTablero();
+				if(posibilidades_saltos(fil,col,a,b)==0)
+				{
+					break;
+				}else
+				if(cont_mov<14){
+					inteligencia();
+					print_tablero();
+					asignarTablero();
+					tablero[fil][col]='*';
+					a=fil;b=col;
+					if(op_modoPcvsPc==1)
+					{
+					cargar_config(1,origen,valorPC);
+					}
+				}
+			}else
+			{
+				if(op_modoPcvsPc==1)
+				{
+				cargar_config(2,origen,valorPC);
+				}
+				break;
+			}
+
+		}
+	}while(1);
+	tablero[fil][col]=turno; //convertidor de mayuscula
+	borrarP();
+	print_tablero();
+	asignarTablero();
+	if(verficar_ganador()==1)
+	{
+		funcion_ventana_ganador();
+		return;
+	}
+	u++;
+	if(vector_quien_juega[2]==0 && u==2)
+	{
+		u=0;
+	}
+	if(vector_quien_juega[2]!=0 && u==6)
+	{
+		u=0;
+	}
+	if(vector_turno[u]==1)
+	{
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega verde!");
+		imagen=gtk_image_new_from_file("verde.jpg");
+		gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+
+	}
+	if(vector_turno[u]==2)
+	{
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Rojo");
+		imagen=gtk_image_new_from_file("roja.jpg");
+		gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+	}
+	if(vector_turno[u]==3)
+	{
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Azul!");
+		imagen=gtk_image_new_from_file("azul.jpg");
+		gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+	}
+	if(vector_turno[u]==4)
+	{
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Amarillo!");
+		imagen=gtk_image_new_from_file("amarillo.jpg");
+		gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+	}
+	if(vector_turno[u]==5)
+	{
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Lila!");
+		imagen=gtk_image_new_from_file("lila.jpg");
+		gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+	}
+	if(vector_turno[u]==6)
+	{
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Naranja!");
+		imagen=gtk_image_new_from_file("naranja.jpg");
+		gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+
+	}
+
+
+}
+void juega_humano(int fil, int col)//esta funcion se encarga de restringir los valores para la hora de elegir y mover la pieza,y controla el juego del humano
+{
+	printf("INTRODUZCA EL NUMERO DE FICHA A JUGAR\n");
+	if(vector_turno[u]==1)
+	{
+		printf("\njuega verde\n");
+		turno='v';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega verde!");
+
+	}
+	if(vector_turno[u]==2)
+	{
+		printf("\njuega rojo\n");
+		turno='r';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Rojo");
+	}
+	if(vector_turno[u]==3)
+	{
+		printf("\njuega azul\n");
+		turno='a';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Azul!");
+	}
+	if(vector_turno[u]==4)
+	{
+		printf("\njuega amarillo\n");
+		turno='y';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Amarillo!");
+	}
+	if(vector_turno[u]==5)
+	{
+		printf("\njuega lila\n");
+		turno='l';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Lila!");
+	}
+	if(vector_turno[u]==6)
+	{
+		printf("\njuega naranja\n");
+		turno='n';
+		gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Naranja!");
+
+	}//la accion ==1 nos imndica que podemos sellecionar
+	if(accion==1 && posibilidades(fil,col)!=0&& tablero[fil][col]==turno)//seleccion
+	{
+		tablero[fil][col]=turno-32; //convertidor de mayuscula
+		asignarTablero();
+		tablero[fil][col]='*';
+		accion=2;
+		a=fil;//guarda las coordenadas donde se selecciono
+		b=col;
+		//al ver que es accion 1 ,que existe posibilidades y es nuestro turno cambia a accion 2
+	}else if(accion==2 && (tablero[fil][col]=='p'  || tablero[fil][col]=='P'))//mover
+	{
+		//accion 2 nos indica que podemos movernos, ademas si existe una p entramos en el sgte ciclo
+		if(tablero[fil][col]=='P')
+		{//se borra las p de la anterior jugada, se imprime el tablero en el gtk
+			borrarP();
+			tablero[fil][col]=turno;
+			asignarTablero();
+			print_tablero();
+			if(posibilidades_saltos(fil,col,a,b)==0)
+			{
+				//verfica posibilidad
+			}else
+			{//se_movio anteriormente estaba en cero ahora se pone 1 para saber si ya hubo un mov previo
+				se_movio=1;//bandera para verificar que ya se movio en casos x
+				cont_salto++;
+				asignarTablero();
+				print_tablero();
+				tablero[fil][col]='*';
+				a=fil;b=col;
+				return;
+			}
+		}
+		tablero[fil][col]=turno;
+		borrarP();
+		asignarTablero();
+		if(verficar_ganador()==1)//se verfica si hay un ganador,si hay sale de la funcion
+		{
+			funcion_ventana_ganador();
+			return;
+		}
+		u++;//pasa al sgte jugador, u es la variable del vector turno que nos indica quien juega
+		if(vector_quien_juega[2]==0 && u==2)//para saber cantidad de jugador con el vector e inicializa la variable u
+		{
+			u=0;
+		}
+		if(vector_quien_juega[2]!=0 && u==6)
+		{
+			u=0;
+		}//las sgtes lineas nos indican en el cuadro con label y color de quien es el turno actual para no perderse
+		if(vector_turno[u]==1)
+		{
+			gtk_label_set_text(GTK_LABEL(nombreActual), "Juega verde!");
+			imagen=gtk_image_new_from_file("verde.jpg");
+			gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+		}
+		if(vector_turno[u]==2)
+		{
+			gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Rojo");
+			imagen=gtk_image_new_from_file("roja.jpg");
+			gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+		}
+		if(vector_turno[u]==3)
+		{
+			gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Azul!");
+			imagen=gtk_image_new_from_file("azul.jpg");
+			gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+		}
+		if(vector_turno[u]==4)
+		{
+			gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Amarillo!");
+			imagen=gtk_image_new_from_file("amarillo.jpg");
+			gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+		}
+		if(vector_turno[u]==5)
+		{
+			gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Lila!");
+			imagen=gtk_image_new_from_file("lila.jpg");
+			gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+		}
+		if(vector_turno[u]==6)
+		{
+			gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Naranja!");
+			imagen=gtk_image_new_from_file("naranja.jpg");
+			gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+
+		}
+		accion=1;//la accion vuelve a ser para poder a seleccionar y para poder saltar ahora
+	}
+	else if(accion==2 &&fil==a&&b==col && se_movio==1)//para dejar que salte
+	{
+			se_movio=0;
+			borrarP();
+			tablero[a][b]=turno;
+			print_tablero();
+			asignarTablero();
+			u++;
+			if(vector_quien_juega[2]==0 && u==2)//para saber cantidad de jugador con el vector e inicializa la variable u
+			{
+				u=0;
+			}
+			if(vector_quien_juega[2]!=0 && u==6)
+			{
+				u=0;
+			}
+			if(vector_turno[u]==1)
+			{
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega verde!");
+				imagen=gtk_image_new_from_file("verde.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+			}
+			if(vector_turno[u]==2)
+			{
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Rojo");
+				imagen=gtk_image_new_from_file("roja.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+			}
+			if(vector_turno[u]==3)
+			{
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Azul!");
+				imagen=gtk_image_new_from_file("azul.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+			}
+			if(vector_turno[u]==4)
+			{
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Amarillo!");
+				imagen=gtk_image_new_from_file("amarillo.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+			}
+			if(vector_turno[u]==5)
+			{
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Lila!");
+				imagen=gtk_image_new_from_file("lila.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+			}
+			if(vector_turno[u]==6)
+			{
+				gtk_label_set_text(GTK_LABEL(nombreActual), "Juega Naranja!");
+				imagen=gtk_image_new_from_file("naranja.jpg");
+				gtk_button_set_image(GTK_BUTTON(colorActual),imagen);
+
+			}
+			cont_salto++;
+			accion=1;
+			return;
+
+	}
+	else if(accion==2 && tablero[fil][col]==turno)
+	{
+		if(se_movio==1 && cont_salto==0)//para que no selecciones otra ficha una vez saltado
+		{
+			se_movio=0;
+			return;
+		}
+		if(cont_salto==0)
+		{
+			borrarP();
+			tablero[a][b]=turno;
+			asignarTablero();
+			accion=1;
+			return;
+		}
+
+	}
+}
+void funcion_ventana_ganador(GtkWidget *widget, gpointer data)//esta funcion nos habilita una ventana indicando quien es el ganador
+{
+	gtk_widget_show_all((GtkWidget *) ventana_quien_gano);
+}
+ int main (int argc, char *argv[])
+ {
+		srand(time(NULL));
+	 guint ret;	GError *error = NULL;
+	  gtk_init (&argc, &argv);
+	  builder = gtk_builder_new();
+	 ret = gtk_builder_add_from_file(builder, "damas.glade", &error);
+		if (ret == 0) {
+			g_print("Error en la función gtk_builder_add_from_file:\n%s",
+					error->message);
+			return 1;
+		}
+
+		g_free(error);
+
+
+    /* create the main, top level, window */
+    modo_juego = gtk_builder_get_object(builder,"modo_juego");
+	g_signal_connect(modo_juego, "destroy", G_CALLBACK(gtk_main_quit),NULL);
+	g_signal_connect (modo_juego, "delete_event", G_CALLBACK (confirmacion_salida), NULL);
+    ventana_confirmar_salir= gtk_builder_get_object(builder,"confirmar_salir");
+    ventanaAcerca= gtk_builder_get_object(builder,"ventanaAcerca");
+
+    ventanaAyuda= gtk_builder_get_object(builder,"ventanaAyuda");
+
+
+    ventana_2nombres= gtk_builder_get_object(builder,"ventana_2nombres");
+	g_signal_connect(ventana_2nombres, "destroy", G_CALLBACK(gtk_main_quit),NULL);
+	g_signal_connect (ventana_2nombres, "delete_event", G_CALLBACK (confirmacion_salida), NULL);
+    ventana_6nombres= gtk_builder_get_object(builder,"ventana_6nombres");
+	g_signal_connect(ventana_6nombres, "destroy", G_CALLBACK(gtk_main_quit),NULL);
+	g_signal_connect (ventana_6nombres, "delete_event", G_CALLBACK (confirmacion_salida), NULL);
+    ventana_color_2= gtk_builder_get_object(builder,"ventana_color_2");
+	g_signal_connect(ventana_color_2, "destroy", G_CALLBACK(gtk_main_quit),NULL);
+	g_signal_connect (ventana_color_2, "delete_event", G_CALLBACK (confirmacion_salida), NULL);
+    ventana_color_6 = gtk_builder_get_object(builder,"ventana_color_6");
+	g_signal_connect(ventana_color_6, "destroy", G_CALLBACK(gtk_main_quit),NULL);
+	g_signal_connect (ventana_color_6, "delete_event", G_CALLBACK (confirmacion_salida), NULL);
+    ventana_tablero= gtk_builder_get_object(builder,"ventana_tablero");
+	g_signal_connect(ventana_tablero, "destroy", G_CALLBACK(gtk_main_quit),NULL);
+	g_signal_connect (ventana_tablero, "delete_event", G_CALLBACK (confirmacion_salida), NULL);
+    ventana_cant_jug= gtk_builder_get_object(builder,"ventana_cant_jug");
+	g_signal_connect(ventana_cant_jug, "destroy", G_CALLBACK(gtk_main_quit),NULL);
+	g_signal_connect (ventana_cant_jug, "delete_event", G_CALLBACK (confirmacion_salida), NULL);
+    ventana_quien_gano=gtk_builder_get_object(builder,"ventana_quien_gano");
+    //botones de las ventanas de ayuda y acerca de
+    ayuda=gtk_builder_get_object(builder,"ayud");
+    g_signal_connect(ayuda, "activate", G_CALLBACK(funcion_ventana_ayuda),NULL);
+    acerca=gtk_builder_get_object(builder,"acerca");
+    g_signal_connect(acerca, "activate", G_CALLBACK(funcion_ventana_acerca),NULL);
+
+    acerc=gtk_builder_get_object(builder,"acerc");
+    g_signal_connect(acerc, "activate", G_CALLBACK(funcion_ventana_acerc),NULL);
+
+    nuevo=gtk_builder_get_object(builder,"nuevo");
+    g_signal_connect(nuevo, "activate", G_CALLBACK(funcion_reiniciar),NULL);
+    salir=gtk_builder_get_object(builder,"salir");
+    g_signal_connect(salir, "activate", G_CALLBACK(confirmacion_salida),NULL);
+
+    //ventana principal; hvsh;hvspc;pcvspc
+    boton_hum_vs_hum = gtk_builder_get_object(builder, "hum_vs_hum");
+    g_signal_connect(boton_hum_vs_hum, "clicked", G_CALLBACK (check_hh), NULL);
+    boton_humpc = gtk_builder_get_object(builder, "hum_pc");
+    g_signal_connect(boton_humpc, "clicked", G_CALLBACK (check_hpc), NULL);
+    boton_pc_vs_pc = gtk_builder_get_object(builder, "pcvspc");
+    g_signal_connect(boton_pc_vs_pc, "clicked", G_CALLBACK (check_pc_vs_pc), NULL);
+    boton_sgte_ventana= gtk_builder_get_object(builder, "sgte_ventana");
+    g_signal_connect(boton_sgte_ventana, "clicked", G_CALLBACK (funcion_sgte_ventana), NULL);
+
+    //2da ventana; eleccion de cantidad de jugadores
+    boton_2jug= gtk_builder_get_object(builder, "2jug");
+    g_signal_connect(boton_2jug, "clicked", G_CALLBACK (check_cant2), NULL);
+    boton_6jug= gtk_builder_get_object(builder, "6jug");
+    g_signal_connect(boton_6jug, "clicked", G_CALLBACK (check_cant6), NULL);
+    boton_volver_modo_juego= gtk_builder_get_object(builder, "ventana_modo_de_juego");
+    g_signal_connect(boton_volver_modo_juego, "clicked", G_CALLBACK (funcion_volver_modo_juego), NULL);
+    boton_volver_ventana_color=gtk_builder_get_object(builder, "ventana_color");
+    g_signal_connect(boton_volver_ventana_color, "clicked", G_CALLBACK (funcion_ir_ventana_colores), NULL);
+
+
+    //3ra ventana colores para dos jugadores
+    color_button2_verde= gtk_builder_get_object(builder, "color_button2_verde");
+    g_signal_connect(color_button2_verde, "clicked", G_CALLBACK (check_color_button2_verde), NULL);
+    color_button2_rojo= gtk_builder_get_object(builder, "color_button2_rojo");
+    g_signal_connect(color_button2_rojo, "clicked", G_CALLBACK (check_color_button2_rojo), NULL);
+    color_button2_random= gtk_builder_get_object(builder, "color_button2_random");
+    g_signal_connect(color_button2_random, "clicked", G_CALLBACK (check_color_button2_random), NULL);
+    elige_button2_verde= gtk_builder_get_object(builder, "elige_button2_verde");
+    g_signal_connect(elige_button2_verde, "clicked", G_CALLBACK (check_elige_button2_verde), NULL);
+    elige_button2_rojo= gtk_builder_get_object(builder, "elige_button2_rojo");
+    g_signal_connect(elige_button2_rojo, "clicked", G_CALLBACK (check_elige_button2_rojo), NULL);
+    elige_button2_random= gtk_builder_get_object(builder, "elige_button2_random");
+    g_signal_connect(elige_button2_random, "clicked", G_CALLBACK (check_elige_button2_random), NULL);
+    //entrys
+    label_elige2= gtk_builder_get_object(builder, "label_elige2");
+	label_color2= gtk_builder_get_object(builder, "label_color2");
+
+
+    boton_volver_cant= gtk_builder_get_object(builder, "ventana_cant");
+    g_signal_connect(boton_volver_cant, "clicked", G_CALLBACK (funcion_volver2), NULL);
+    boton_siguiente_nombres2= gtk_builder_get_object(builder, "siguiente_nombres2");//falta hacer las condiciones que no se seleccione mas de una opcion y la carga de datos
+    g_signal_connect(boton_siguiente_nombres2, "clicked", G_CALLBACK (funcion_siguiente2), NULL);
+
+
+    //3ra ventana colores para 6 jugadores
+    	color_button6_verde= gtk_builder_get_object(builder, "color_button6_verde");
+        g_signal_connect(color_button6_verde, "clicked", G_CALLBACK (check_color_button6_verde), NULL);
+        color_button6_rojo= gtk_builder_get_object(builder, "color_button6_rojo");
+        g_signal_connect(color_button6_rojo, "clicked", G_CALLBACK (check_color_button6_rojo), NULL);
+        color_button6_random= gtk_builder_get_object(builder, "color_button6_random");
+        g_signal_connect(color_button6_random, "clicked", G_CALLBACK (check_color_button6_random), NULL);
+        color_button6_azul= gtk_builder_get_object(builder, "color_button6_azul");
+        g_signal_connect(color_button6_azul, "clicked", G_CALLBACK (check_color_button6_azul), NULL);
+        color_button6_amarillo= gtk_builder_get_object(builder, "color_button6_amarillo");
+        g_signal_connect(color_button6_amarillo, "clicked", G_CALLBACK (check_color_button6_amarillo), NULL);
+        color_button6_naranja= gtk_builder_get_object(builder, "color_button6_naranja");
+        g_signal_connect(color_button6_naranja, "clicked", G_CALLBACK (check_color_button6_naranja), NULL);
+        color_button6_lila= gtk_builder_get_object(builder, "color_button6_lila");
+        g_signal_connect(color_button6_lila, "clicked", G_CALLBACK (check_color_button6_lila), NULL);
+
+        elige_button6_verde= gtk_builder_get_object(builder, "elige_button6_verde");
+        g_signal_connect(elige_button6_verde, "clicked", G_CALLBACK (check_elige_button6_verde), NULL);
+        elige_button6_rojo= gtk_builder_get_object(builder, "elige_button6_rojo");
+        g_signal_connect(elige_button6_rojo, "clicked", G_CALLBACK (check_elige_button6_rojo), NULL);
+        elige_button6_random= gtk_builder_get_object(builder, "elige_button6_random");
+        g_signal_connect(elige_button6_random, "clicked", G_CALLBACK (check_elige_button6_random), NULL);
+        elige_button6_amarillo= gtk_builder_get_object(builder, "elige_button6_amarillo");
+        g_signal_connect(elige_button6_amarillo, "clicked", G_CALLBACK (check_elige_button6_amarillo), NULL);
+        elige_button6_lila= gtk_builder_get_object(builder, "elige_button6_lila");
+        g_signal_connect(elige_button6_lila, "clicked", G_CALLBACK (check_elige_button6_lila), NULL);
+        elige_button6_azul= gtk_builder_get_object(builder, "elige_button6_azul");
+        g_signal_connect(elige_button6_azul, "clicked", G_CALLBACK (check_elige_button6_azul), NULL);
+        elige_button6_naranja= gtk_builder_get_object(builder, "elige_button6_naranja");
+        g_signal_connect(elige_button6_naranja, "clicked", G_CALLBACK (check_elige_button6_naranja), NULL);
+        //entrys
+        label_elige6= gtk_builder_get_object(builder, "label_elige6");
+        label_color6= gtk_builder_get_object(builder, "label_color6");
+
+        boton_siguiente_nombres6= gtk_builder_get_object(builder, "siguiente_nombres6");
+        g_signal_connect(boton_siguiente_nombres6, "clicked", G_CALLBACK (funcion_siguiente6), NULL);
+        boton_volver_cant2= gtk_builder_get_object(builder, "ventana_cant2");
+        g_signal_connect(boton_volver_cant, "clicked", G_CALLBACK (funcion_volver6), NULL);
+
+        //4ta ventana VENTANA DE 2 NOMBRES
+        jug1= gtk_builder_get_object(builder, "jug1");
+        jug2= gtk_builder_get_object(builder, "jug2");
+        boton_volver_color_2=gtk_builder_get_object(builder, "volver_color_2");
+        g_signal_connect(boton_volver_color_2, "clicked", G_CALLBACK (funcion_volver_elegir_colores2), NULL);
+        boton_jugar_tablero=gtk_builder_get_object(builder, "jugar_tablero");
+        g_signal_connect(boton_jugar_tablero, "clicked", G_CALLBACK (funcion_ir_tablero_juego), NULL);
+
+        //4ta ventana de 6 nombres
+        jug1_=gtk_builder_get_object(builder, "jug1_");
+        jug2_=gtk_builder_get_object(builder, "jug2_");
+        jug3=gtk_builder_get_object(builder, "jug3");
+        jug4=gtk_builder_get_object(builder, "jug4");
+        jug5=gtk_builder_get_object(builder, "jug5");
+        jug6=gtk_builder_get_object(builder, "jug6");
+        boton_volver_color_6=gtk_builder_get_object(builder, "volver_color_6");
+        g_signal_connect(boton_volver_color_6, "clicked", G_CALLBACK (funcion_volver_elegir_colores6), NULL);
+        boton_juego_tablero_6=gtk_builder_get_object(builder, "jugar_tablero6");
+        g_signal_connect(boton_juego_tablero_6, "clicked", G_CALLBACK (funcion_ir_tablero_juego6), NULL);
+
+        //tablero de juego ya
+        boton1 = gtk_builder_get_object(builder, "button1");
+		g_signal_connect(boton1,"clicked",G_CALLBACK(funcionBoton1),NULL);
+		boton2 = gtk_builder_get_object(builder, "button2");
+		g_signal_connect(boton2,"clicked",G_CALLBACK(funcionBoton2),NULL);
+		boton3 = gtk_builder_get_object(builder, "button3");
+		g_signal_connect(boton3,"clicked",G_CALLBACK(funcionBoton3),NULL);
+		boton4 = gtk_builder_get_object(builder, "button4");
+		g_signal_connect(boton4,"clicked",G_CALLBACK(funcionBoton4),NULL);
+		boton5 = gtk_builder_get_object(builder, "button5");
+		g_signal_connect(boton5,"clicked",G_CALLBACK(funcionBoton5),NULL);
+		boton6 = gtk_builder_get_object(builder, "button6");
+		g_signal_connect(boton6,"clicked",G_CALLBACK(funcionBoton6),NULL);
+		boton7 = gtk_builder_get_object(builder, "button7");
+		g_signal_connect(boton7,"clicked",G_CALLBACK(funcionBoton7),NULL);
+		boton8 = gtk_builder_get_object(builder, "button8");
+		g_signal_connect(boton8,"clicked",G_CALLBACK(funcionBoton8),NULL);
+		boton9 = gtk_builder_get_object(builder, "button9");
+		g_signal_connect(boton9,"clicked",G_CALLBACK(funcionBoton9),NULL);
+		boton10 = gtk_builder_get_object(builder, "button10");
+		g_signal_connect(boton10,"clicked",G_CALLBACK(funcionBoton10),NULL);
+		boton11 = gtk_builder_get_object(builder, "button11");
+		g_signal_connect(boton11,"clicked",G_CALLBACK(funcionBoton11),NULL);
+		boton12 = gtk_builder_get_object(builder, "button12");
+		g_signal_connect(boton12,"clicked",G_CALLBACK(funcionBoton12),NULL);
+		boton13 = gtk_builder_get_object(builder, "button13");
+		g_signal_connect(boton13,"clicked",G_CALLBACK(funcionBoton13),NULL);
+		boton14 = gtk_builder_get_object(builder, "button14");
+		g_signal_connect(boton14,"clicked",G_CALLBACK(funcionBoton14),NULL);
+		boton15 = gtk_builder_get_object(builder, "button15");
+		g_signal_connect(boton15,"clicked",G_CALLBACK(funcionBoton15),NULL);
+		boton16 = gtk_builder_get_object(builder, "button16");
+		g_signal_connect(boton16,"clicked",G_CALLBACK(funcionBoton16),NULL);
+		boton17 = gtk_builder_get_object(builder, "button17");
+		g_signal_connect(boton17,"clicked",G_CALLBACK(funcionBoton17),NULL);
+		boton18 = gtk_builder_get_object(builder, "button18");
+		g_signal_connect(boton18,"clicked",G_CALLBACK(funcionBoton18),NULL);
+		boton19 = gtk_builder_get_object(builder, "button19");
+		g_signal_connect(boton19,"clicked",G_CALLBACK(funcionBoton19),NULL);
+		boton20 = gtk_builder_get_object(builder, "button20");
+		g_signal_connect(boton20,"clicked",G_CALLBACK(funcionBoton20),NULL);
+		boton21 = gtk_builder_get_object(builder, "button21");
+		g_signal_connect(boton21,"clicked",G_CALLBACK(funcionBoton21),NULL);
+		boton22 = gtk_builder_get_object(builder, "button22");
+		g_signal_connect(boton22,"clicked",G_CALLBACK(funcionBoton22),NULL);
+		boton23 = gtk_builder_get_object(builder, "button23");
+		g_signal_connect(boton23,"clicked",G_CALLBACK(funcionBoton23),NULL);
+		boton24 = gtk_builder_get_object(builder, "button24");
+		g_signal_connect(boton24,"clicked",G_CALLBACK(funcionBoton24),NULL);
+		boton25 = gtk_builder_get_object(builder, "button25");
+		g_signal_connect(boton25,"clicked",G_CALLBACK(funcionBoton25),NULL);
+		boton26 = gtk_builder_get_object(builder, "button26");
+		g_signal_connect(boton26,"clicked",G_CALLBACK(funcionBoton26),NULL);
+		boton27 = gtk_builder_get_object(builder, "button27");
+		g_signal_connect(boton27,"clicked",G_CALLBACK(funcionBoton27),NULL);
+		boton28 = gtk_builder_get_object(builder, "button28");
+		g_signal_connect(boton28,"clicked",G_CALLBACK(funcionBoton28),NULL);
+		boton29 = gtk_builder_get_object(builder, "button29");
+		g_signal_connect(boton29,"clicked",G_CALLBACK(funcionBoton29),NULL);
+		boton30 = gtk_builder_get_object(builder, "button30");
+		g_signal_connect(boton30,"clicked",G_CALLBACK(funcionBoton30),NULL);
+		boton31 = gtk_builder_get_object(builder, "button31");
+		g_signal_connect(boton31,"clicked",G_CALLBACK(funcionBoton31),NULL);
+		boton32 = gtk_builder_get_object(builder, "button32");
+		g_signal_connect(boton32,"clicked",G_CALLBACK(funcionBoton32),NULL);
+		boton33 = gtk_builder_get_object(builder, "button33");
+		g_signal_connect(boton33,"clicked",G_CALLBACK(funcionBoton33),NULL);
+		boton34 = gtk_builder_get_object(builder, "button34");
+		g_signal_connect(boton34,"clicked",G_CALLBACK(funcionBoton34),NULL);
+		boton35 = gtk_builder_get_object(builder, "button35");
+		g_signal_connect(boton35,"clicked",G_CALLBACK(funcionBoton35),NULL);
+		boton36 = gtk_builder_get_object(builder, "button36");
+		g_signal_connect(boton36,"clicked",G_CALLBACK(funcionBoton36),NULL);
+		boton37 = gtk_builder_get_object(builder, "button37");
+		g_signal_connect(boton37,"clicked",G_CALLBACK(funcionBoton37),NULL);
+		boton38 = gtk_builder_get_object(builder, "button38");
+		g_signal_connect(boton38,"clicked",G_CALLBACK(funcionBoton38),NULL);
+		boton39 = gtk_builder_get_object(builder, "button39");
+		g_signal_connect(boton39,"clicked",G_CALLBACK(funcionBoton39),NULL);
+		boton40 = gtk_builder_get_object(builder, "button40");
+		g_signal_connect(boton40,"clicked",G_CALLBACK(funcionBoton40),NULL);
+		boton41 = gtk_builder_get_object(builder, "button41");
+		g_signal_connect(boton41,"clicked",G_CALLBACK(funcionBoton41),NULL);
+		boton42 = gtk_builder_get_object(builder, "button42");
+		g_signal_connect(boton42,"clicked",G_CALLBACK(funcionBoton42),NULL);
+		boton43 = gtk_builder_get_object(builder, "button43");
+		g_signal_connect(boton43,"clicked",G_CALLBACK(funcionBoton43),NULL);
+		boton44 = gtk_builder_get_object(builder, "button44");
+		g_signal_connect(boton44,"clicked",G_CALLBACK(funcionBoton44),NULL);
+		boton45 = gtk_builder_get_object(builder, "button45");
+		g_signal_connect(boton45,"clicked",G_CALLBACK(funcionBoton45),NULL);
+		boton46 = gtk_builder_get_object(builder, "button46");
+		g_signal_connect(boton46,"clicked",G_CALLBACK(funcionBoton46),NULL);
+		boton47 = gtk_builder_get_object(builder, "button47");
+		g_signal_connect(boton47,"clicked",G_CALLBACK(funcionBoton47),NULL);
+		boton48 = gtk_builder_get_object(builder, "button48");
+		g_signal_connect(boton48,"clicked",G_CALLBACK(funcionBoton48),NULL);
+		boton49 = gtk_builder_get_object(builder, "button49");
+		g_signal_connect(boton49,"clicked",G_CALLBACK(funcionBoton49),NULL);
+		boton50 = gtk_builder_get_object(builder, "button50");
+		g_signal_connect(boton50,"clicked",G_CALLBACK(funcionBoton50),NULL);
+		boton51 = gtk_builder_get_object(builder, "button51");
+		g_signal_connect(boton51,"clicked",G_CALLBACK(funcionBoton51),NULL);
+		boton52 = gtk_builder_get_object(builder, "button52");
+		g_signal_connect(boton52,"clicked",G_CALLBACK(funcionBoton52),NULL);
+		boton53 = gtk_builder_get_object(builder, "button53");
+		g_signal_connect(boton53,"clicked",G_CALLBACK(funcionBoton53),NULL);
+		boton54 = gtk_builder_get_object(builder, "button54");
+		g_signal_connect(boton54,"clicked",G_CALLBACK(funcionBoton54),NULL);
+		boton55 = gtk_builder_get_object(builder, "button55");
+		g_signal_connect(boton55,"clicked",G_CALLBACK(funcionBoton55),NULL);
+		boton56 = gtk_builder_get_object(builder, "button56");
+		g_signal_connect(boton56,"clicked",G_CALLBACK(funcionBoton56),NULL);
+		boton57 = gtk_builder_get_object(builder, "button57");
+		g_signal_connect(boton57,"clicked",G_CALLBACK(funcionBoton57),NULL);
+		boton58 = gtk_builder_get_object(builder, "button58");
+		g_signal_connect(boton58,"clicked",G_CALLBACK(funcionBoton58),NULL);
+		boton59 = gtk_builder_get_object(builder, "button59");
+		g_signal_connect(boton59,"clicked",G_CALLBACK(funcionBoton59),NULL);
+		boton60 = gtk_builder_get_object(builder, "button60");
+		g_signal_connect(boton60,"clicked",G_CALLBACK(funcionBoton60),NULL);
+		boton61 = gtk_builder_get_object(builder, "button61");
+		g_signal_connect(boton61,"clicked",G_CALLBACK(funcionBoton61),NULL);
+		boton62 = gtk_builder_get_object(builder, "button62");
+		g_signal_connect(boton62,"clicked",G_CALLBACK(funcionBoton62),NULL);
+		boton63 = gtk_builder_get_object(builder, "button63");
+		g_signal_connect(boton63,"clicked",G_CALLBACK(funcionBoton63),NULL);
+		boton64 = gtk_builder_get_object(builder, "button64");
+		g_signal_connect(boton64,"clicked",G_CALLBACK(funcionBoton64),NULL);
+		boton65 = gtk_builder_get_object(builder, "button65");
+		g_signal_connect(boton65,"clicked",G_CALLBACK(funcionBoton65),NULL);
+		boton66 = gtk_builder_get_object(builder, "button66");
+		g_signal_connect(boton66,"clicked",G_CALLBACK(funcionBoton66),NULL);
+		boton67 = gtk_builder_get_object(builder, "button67");
+		g_signal_connect(boton67,"clicked",G_CALLBACK(funcionBoton67),NULL);
+		boton68 = gtk_builder_get_object(builder, "button68");
+		g_signal_connect(boton68,"clicked",G_CALLBACK(funcionBoton68),NULL);
+		boton69 = gtk_builder_get_object(builder, "button69");
+		g_signal_connect(boton69,"clicked",G_CALLBACK(funcionBoton69),NULL);
+		boton70 = gtk_builder_get_object(builder, "button70");
+		g_signal_connect(boton70,"clicked",G_CALLBACK(funcionBoton70),NULL);
+		boton71 = gtk_builder_get_object(builder, "button71");
+		g_signal_connect(boton71,"clicked",G_CALLBACK(funcionBoton71),NULL);
+		boton72 = gtk_builder_get_object(builder, "button72");
+		g_signal_connect(boton72,"clicked",G_CALLBACK(funcionBoton72),NULL);
+		boton73 = gtk_builder_get_object(builder, "button73");
+		g_signal_connect(boton73,"clicked",G_CALLBACK(funcionBoton73),NULL);
+		boton74 = gtk_builder_get_object(builder, "button74");
+		g_signal_connect(boton74,"clicked",G_CALLBACK(funcionBoton74),NULL);
+		boton75 = gtk_builder_get_object(builder, "button75");
+		g_signal_connect(boton75,"clicked",G_CALLBACK(funcionBoton75),NULL);
+		boton76 = gtk_builder_get_object(builder, "button76");
+		g_signal_connect(boton76,"clicked",G_CALLBACK(funcionBoton76),NULL);
+		boton77 = gtk_builder_get_object(builder, "button77");
+		g_signal_connect(boton77,"clicked",G_CALLBACK(funcionBoton77),NULL);
+		boton78 = gtk_builder_get_object(builder, "button78");
+		g_signal_connect(boton78,"clicked",G_CALLBACK(funcionBoton78),NULL);
+		boton79 = gtk_builder_get_object(builder, "button79");
+		g_signal_connect(boton79,"clicked",G_CALLBACK(funcionBoton79),NULL);
+		boton80 = gtk_builder_get_object(builder, "button80");
+		g_signal_connect(boton80,"clicked",G_CALLBACK(funcionBoton80),NULL);
+		boton81 = gtk_builder_get_object(builder, "button81");
+		g_signal_connect(boton81,"clicked",G_CALLBACK(funcionBoton81),NULL);
+		boton82 = gtk_builder_get_object(builder, "button82");
+		g_signal_connect(boton82,"clicked",G_CALLBACK(funcionBoton82),NULL);
+		boton83 = gtk_builder_get_object(builder, "button83");
+		g_signal_connect(boton83,"clicked",G_CALLBACK(funcionBoton83),NULL);
+		boton84 = gtk_builder_get_object(builder, "button84");
+		g_signal_connect(boton84,"clicked",G_CALLBACK(funcionBoton84),NULL);
+		boton85 = gtk_builder_get_object(builder, "button85");
+		g_signal_connect(boton85,"clicked",G_CALLBACK(funcionBoton85),NULL);
+		boton86 = gtk_builder_get_object(builder, "button86");
+		g_signal_connect(boton86,"clicked",G_CALLBACK(funcionBoton86),NULL);
+		boton87 = gtk_builder_get_object(builder, "button87");
+		g_signal_connect(boton87,"clicked",G_CALLBACK(funcionBoton87),NULL);
+		boton88 = gtk_builder_get_object(builder, "button88");
+		g_signal_connect(boton88,"clicked",G_CALLBACK(funcionBoton88),NULL);
+		boton89 = gtk_builder_get_object(builder, "button89");
+		g_signal_connect(boton89,"clicked",G_CALLBACK(funcionBoton89),NULL);
+		boton90 = gtk_builder_get_object(builder, "button90");
+		g_signal_connect(boton90,"clicked",G_CALLBACK(funcionBoton90),NULL);
+		boton91 = gtk_builder_get_object(builder, "button91");
+		g_signal_connect(boton91,"clicked",G_CALLBACK(funcionBoton91),NULL);
+		boton92 = gtk_builder_get_object(builder, "button92");
+		g_signal_connect(boton92,"clicked",G_CALLBACK(funcionBoton92),NULL);
+		boton93 = gtk_builder_get_object(builder, "button93");
+		g_signal_connect(boton93,"clicked",G_CALLBACK(funcionBoton93),NULL);
+		boton94 = gtk_builder_get_object(builder, "button94");
+		g_signal_connect(boton94,"clicked",G_CALLBACK(funcionBoton94),NULL);
+		boton95 = gtk_builder_get_object(builder, "button95");
+		g_signal_connect(boton95,"clicked",G_CALLBACK(funcionBoton95),NULL);
+		boton96 = gtk_builder_get_object(builder, "button96");
+		g_signal_connect(boton96,"clicked",G_CALLBACK(funcionBoton96),NULL);
+		boton97 = gtk_builder_get_object(builder, "button97");
+		g_signal_connect(boton97,"clicked",G_CALLBACK(funcionBoton97),NULL);
+		boton98 = gtk_builder_get_object(builder, "button98");
+		g_signal_connect(boton98,"clicked",G_CALLBACK(funcionBoton98),NULL);
+		boton99 = gtk_builder_get_object(builder, "button99");
+		g_signal_connect(boton99,"clicked",G_CALLBACK(funcionBoton99),NULL);
+		boton100 = gtk_builder_get_object(builder, "button100");
+		g_signal_connect(boton100,"clicked",G_CALLBACK(funcionBoton100),NULL);
+		boton101 = gtk_builder_get_object(builder, "button101");
+		g_signal_connect(boton101,"clicked",G_CALLBACK(funcionBoton101),NULL);
+		boton102 = gtk_builder_get_object(builder, "button102");
+		g_signal_connect(boton102,"clicked",G_CALLBACK(funcionBoton102),NULL);
+		boton103 = gtk_builder_get_object(builder, "button103");
+		g_signal_connect(boton103,"clicked",G_CALLBACK(funcionBoton103),NULL);
+		boton104 = gtk_builder_get_object(builder, "button104");
+		g_signal_connect(boton104,"clicked",G_CALLBACK(funcionBoton104),NULL);
+		boton105 = gtk_builder_get_object(builder, "button105");
+		g_signal_connect(boton105,"clicked",G_CALLBACK(funcionBoton105),NULL);
+		boton106 = gtk_builder_get_object(builder, "button106");
+		g_signal_connect(boton106,"clicked",G_CALLBACK(funcionBoton106),NULL);
+		boton107 = gtk_builder_get_object(builder, "button107");
+		g_signal_connect(boton107,"clicked",G_CALLBACK(funcionBoton107),NULL);
+		boton108 = gtk_builder_get_object(builder, "button108");
+		g_signal_connect(boton108,"clicked",G_CALLBACK(funcionBoton108),NULL);
+		boton109 = gtk_builder_get_object(builder, "button109");
+		g_signal_connect(boton109,"clicked",G_CALLBACK(funcionBoton109),NULL);
+		boton110 = gtk_builder_get_object(builder, "button110");
+		g_signal_connect(boton110,"clicked",G_CALLBACK(funcionBoton110),NULL);
+		boton111 = gtk_builder_get_object(builder, "button111");
+		g_signal_connect(boton111,"clicked",G_CALLBACK(funcionBoton111),NULL);
+		boton112 = gtk_builder_get_object(builder, "button112");
+		g_signal_connect(boton112,"clicked",G_CALLBACK(funcionBoton112),NULL);
+		boton113 = gtk_builder_get_object(builder, "button113");
+		g_signal_connect(boton113,"clicked",G_CALLBACK(funcionBoton113),NULL);
+		boton114 = gtk_builder_get_object(builder, "button114");
+		g_signal_connect(boton114,"clicked",G_CALLBACK(funcionBoton114),NULL);
+		boton115 = gtk_builder_get_object(builder, "button115");
+		g_signal_connect(boton115,"clicked",G_CALLBACK(funcionBoton115),NULL);
+		boton116 = gtk_builder_get_object(builder, "button116");
+		g_signal_connect(boton116,"clicked",G_CALLBACK(funcionBoton116),NULL);
+		boton117 = gtk_builder_get_object(builder, "button117");
+		g_signal_connect(boton117,"clicked",G_CALLBACK(funcionBoton117),NULL);
+		boton118 = gtk_builder_get_object(builder, "button118");
+		g_signal_connect(boton118,"clicked",G_CALLBACK(funcionBoton118),NULL);
+		boton119 = gtk_builder_get_object(builder, "button119");
+		g_signal_connect(boton119,"clicked",G_CALLBACK(funcionBoton119),NULL);
+		boton120 = gtk_builder_get_object(builder, "button120");
+		g_signal_connect(boton120,"clicked",G_CALLBACK(funcionBoton120),NULL);
+		boton121 = gtk_builder_get_object(builder, "button121");
+		g_signal_connect(boton121,"clicked",G_CALLBACK(funcionBoton121),NULL);
+		//botones que indican el turno
+		color1=gtk_builder_get_object(builder, "color1");
+		color2=gtk_builder_get_object(builder, "color2");
+		color3=gtk_builder_get_object(builder, "color3");
+		color4=gtk_builder_get_object(builder, "color4");
+		color5=gtk_builder_get_object(builder, "color5");
+		color6=gtk_builder_get_object(builder, "color6");
+		colorActual=gtk_builder_get_object(builder, "colorActual");
+		//entrys
+		nombreActual= gtk_builder_get_object(builder, "nombreActual");
+		//boton que da la opcion para que juege la pc
+		boton_juega_pc=gtk_builder_get_object(builder, "boton_juega_pc");
+		g_signal_connect(boton_juega_pc,"clicked",G_CALLBACK(funcion_boton_juega_pc),NULL);
+		//
+		ficha_ganador= gtk_builder_get_object(builder, "ficha_ganador");
+		//Definimos a la ventana_confirmar_salir, sus botones, y los respectivos callbacks.
+			ventana_confirmar_salir=gtk_builder_get_object(builder,"confirmar_salir");
+			boton_aceptar_salir=gtk_builder_get_object(builder,"boton_aceptar_salir");
+			boton_cancelar_salir=gtk_builder_get_object(builder,"boton_cancelar_salir");
+			//entrys de archivo
+			jug1=gtk_builder_get_object(builder, "jug1");
+			jug2=gtk_builder_get_object(builder, "jug2");
+			jug1_=gtk_builder_get_object(builder, "jug1_");
+			jug2_=gtk_builder_get_object(builder, "jug2_");
+			jug3=gtk_builder_get_object(builder, "jug3");
+			jug4=gtk_builder_get_object(builder, "jug4");
+			jug5=gtk_builder_get_object(builder, "jug5");
+			jug6=gtk_builder_get_object(builder, "jug6");
+			entry_nombre_archivo=gtk_builder_get_object(builder,"nombre_archivo");
+   gtk_widget_show_all((GtkWidget *) modo_juego);
+
+
+    /* start the main loop, and let it rest there until the application is closed */
+    gtk_main ();
+
+    return 0;
+ }
